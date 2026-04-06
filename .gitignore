@@ -1,0 +1,60 @@
+# =========================
+# Build
+# =========================
+/build/
+/out/
+.gradle/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE (IntelliJ)
+# =========================
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# =========================
+# VS Code (optional)
+# =========================
+.vscode/
+
+# =========================
+# Java
+# =========================
+*.class
+
+# =========================
+# Gradle Wrapper (keep jar, ignore others if needed)
+# =========================
+!gradle/wrapper/gradle-wrapper.jar
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+application-local.yml
+application-local.properties
+
+# =========================
+# Mac/Linux temp files
+# =========================
+*.swp
+*.swo
+
+# =========================
+# Test output
+# =========================
+/test-output/
+/reports/
