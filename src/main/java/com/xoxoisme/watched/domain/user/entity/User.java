@@ -29,5 +29,5 @@ public class User extends BaseTimeEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private LocalDate birthDate;    //TODO: 응답 포맷은 "YYYY-MM-DD" dto에서 설정
+    private LocalDate birthDate;    // TODO: 응답 포맷은 "YYYY-MM-DD" dto에서 설정
 }
