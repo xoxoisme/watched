@@ -28,6 +28,6 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "birth_date")
     private LocalDate birthDate;    // TODO: 응답 포맷은 "YYYY-MM-DD" dto에서 설정
 }
