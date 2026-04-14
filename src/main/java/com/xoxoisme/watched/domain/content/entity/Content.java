@@ -18,20 +18,20 @@ import java.time.LocalDateTime;
 public class Content extends BaseTimeEntity {
 
     @Column(nullable = false, length = 100)
-    private String title;
+    private String title;   // 본 제목
 
     @Column(nullable = false, length = 100, name = "original_title")
-    private String originalTitle;
+    private String originalTitle;   // 나라별 언어로 해석된 제목
 
     @Column(nullable = false, length = 255, name = "poster_path")
-    private String posterPath;
+    private String posterPath;  // TMDB api에서 제공하는 포스터 경로
 
     @Column(nullable = true, name = "release_date")
-    private LocalDateTime releaseDate;  // TMDB api 특성 상 아주 오래된 영화는 null이 존재한다.
+    private LocalDateTime releaseDate;  // TMDB api 특성 상 아주 오래된 영화는 null
 
     @Column(nullable = false, length = 100)
     private String type;
 
     @Column(nullable = true, name = "vote_average")
-    private BigDecimal voteAverage;
+    private BigDecimal voteAverage; // TMDB api에서 제공하는 평점
 }
