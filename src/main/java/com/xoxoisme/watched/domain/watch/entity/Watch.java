@@ -16,11 +16,11 @@ import java.time.LocalDate;
 public class Watch extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", nullable = false)
+    @JoinColumn(nullable = false, name = "content_id")
     private Content content;
 
     @Column(nullable = false, length = 20)
