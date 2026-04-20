@@ -4,12 +4,14 @@ import com.xoxoisme.watched.domain.content.entity.Content;
 import com.xoxoisme.watched.domain.user.entity.User;
 import com.xoxoisme.watched.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(
         name = "rating",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "content_id"})
 )
+@Getter
 public class Rating extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
