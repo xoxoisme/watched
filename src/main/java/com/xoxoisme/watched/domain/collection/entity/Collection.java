@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Collections")
+@Table(name = "collection")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Collection extends BaseTimeEntity {

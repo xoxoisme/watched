@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "watches")
+@Table(name = "watch")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Watch extends BaseTimeEntity {

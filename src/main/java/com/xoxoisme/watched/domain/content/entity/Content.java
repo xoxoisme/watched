@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "contents")
+@Table(name = "content")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content extends BaseTimeEntity {
