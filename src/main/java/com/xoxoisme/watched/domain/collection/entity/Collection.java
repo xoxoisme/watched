@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Collection extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "user_id")
+    @JoinColumn(nullable = false, name = "user_idd")
     private User user;
 
     @Column(length = 100)
