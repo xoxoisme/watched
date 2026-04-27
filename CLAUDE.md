@@ -81,4 +81,5 @@ com.xoxoisme.watched/
   - perf : 성능 개선에 대한 커밋
 
 ## 핵심 패턴
-- 에러는 공통화 `BusinessException`, `ErrorCode`, `GlobalExceptionHandler` 로 관리합니다.
+- 전역 예외 처리를 따로 해두었습니다.
+- 임무를 마치고, git에 올리기 전 제가 직접 컨펌을 하고 올리도록 하겠습니다.
