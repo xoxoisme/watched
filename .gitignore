@@ -46,6 +46,7 @@ Thumbs.db
 .env.*
 application-local.yml
 application-local.properties
+src/test/resources/application.yaml
 
 # =========================
 # Mac/Linux temp files
