@@ -30,4 +30,13 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false, name = "birth_date")
     private LocalDate birthDate;    // TODO: 응답 포맷은 "YYYY-MM-DD" dto에서 설정
+
+    public static User create(String email, String encodedPassword, String nickname, LocalDate birthDate) {
+        User user = new User();
+        user.email = email;
+        user.password = encodedPassword;
+        user.nickname = nickname;
+        user.birthDate = birthDate;
+        return user;
+    }
 }
