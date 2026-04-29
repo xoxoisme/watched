@@ -23,9 +23,24 @@ public class Watch extends BaseTimeEntity {
     @JoinColumn(nullable = false, name = "content_id")
     private Content content;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String status;  // 현재 시청 상태
+    private WatchStatus status;
 
-    @Column(nullable = true, name = "watched_at")
-    private LocalDate watchedAt;    // 시청 일시 기록용(사용자 직접)
+    @Column(name = "watched_at")
+    private LocalDate watchedAt;
+
+    public static Watch create(User user, Content content, WatchStatus status, LocalDate watchedAt) {
+        Watch watch = new Watch();
+        watch.user = user;
+        watch.content = content;
+        watch.status = status;
+        watch.watchedAt = watchedAt;
+        return watch;
+    }
+
+    public void update(WatchStatus status, LocalDate watchedAt) {
+        this.status = status;
+        this.watchedAt = watchedAt;
+    }
 }
