@@ -34,6 +34,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/signup",
                                 "/api/users/login",
+                                "/api/contents/search",
+                                "/api/contents/{id}",
+                                "/api/contents/tmdb/{tmdbId}",
                                 "/h2-console/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
