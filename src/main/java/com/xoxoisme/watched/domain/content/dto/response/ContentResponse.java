@@ -1,4 +1,4 @@
-package com.xoxoisme.watched.domain.content.dto;
+package com.xoxoisme.watched.domain.content.dto.response;
 
 import com.xoxoisme.watched.domain.content.entity.Content;
 import com.xoxoisme.watched.domain.content.entity.ContentType;

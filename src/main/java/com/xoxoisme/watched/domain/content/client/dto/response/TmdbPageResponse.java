@@ -1,4 +1,4 @@
-package com.xoxoisme.watched.domain.content.client.dto;
+package com.xoxoisme.watched.domain.content.client.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

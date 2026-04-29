@@ -1,4 +1,4 @@
-package com.xoxoisme.watched.domain.content.dto;
+package com.xoxoisme.watched.domain.content.dto.request;
 
 import com.xoxoisme.watched.domain.content.entity.ContentType;
 import jakarta.validation.constraints.NotBlank;

@@ -1,8 +1,8 @@
 package com.xoxoisme.watched.domain.content.client;
 
-import com.xoxoisme.watched.domain.content.client.dto.TmdbMovieResult;
-import com.xoxoisme.watched.domain.content.client.dto.TmdbPageResponse;
 import com.xoxoisme.watched.domain.content.client.dto.TmdbTvResult;
+import com.xoxoisme.watched.domain.content.client.dto.request.TmdbMovieResult;
+import com.xoxoisme.watched.domain.content.client.dto.response.TmdbPageResponse;
 import com.xoxoisme.watched.global.config.TmdbProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;

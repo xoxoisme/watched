@@ -1,9 +1,9 @@
 package com.xoxoisme.watched.domain.content.service;
 
 import com.xoxoisme.watched.domain.content.client.TmdbClient;
-import com.xoxoisme.watched.domain.content.client.dto.TmdbMovieResult;
 import com.xoxoisme.watched.domain.content.client.dto.TmdbTvResult;
-import com.xoxoisme.watched.domain.content.dto.TmdbSearchResponse;
+import com.xoxoisme.watched.domain.content.client.dto.request.TmdbMovieResult;
+import com.xoxoisme.watched.domain.content.dto.response.TmdbSearchResponse;
 import com.xoxoisme.watched.domain.content.entity.Content;
 import com.xoxoisme.watched.domain.content.entity.ContentType;
 import com.xoxoisme.watched.domain.content.repository.ContentRepository;

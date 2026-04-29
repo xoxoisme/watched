@@ -1,7 +1,7 @@
 package com.xoxoisme.watched.domain.content.service;
 
-import com.xoxoisme.watched.domain.content.dto.ContentCreateRequest;
-import com.xoxoisme.watched.domain.content.dto.ContentResponse;
+import com.xoxoisme.watched.domain.content.dto.request.ContentCreateRequest;
+import com.xoxoisme.watched.domain.content.dto.response.ContentResponse;
 import com.xoxoisme.watched.domain.content.entity.Content;
 import com.xoxoisme.watched.domain.content.repository.ContentRepository;
 import com.xoxoisme.watched.global.common.exception.BusinessException;

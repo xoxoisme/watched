@@ -85,3 +85,4 @@ com.xoxoisme.watched/
 - 전역 예외 처리를 따로 해두었습니다.
 - 임무를 마치고, git에 올리기 전 제가 직접 컨펌을 하고 올리도록 하겠습니다.(토큰을 최소화할 수 있도록 너무 세분화하지 않아도 됩니다.)
 - Controller는 Apiresponse로 통일합니다.
+- dto 구조는 /dto 내에서 request와 response 폴더로 나누어 정리해주세요. request, response가 아니면 /dto내에 그냥 두셔도 됩니다.

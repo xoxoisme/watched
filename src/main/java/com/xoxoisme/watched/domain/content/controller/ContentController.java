@@ -1,8 +1,8 @@
 package com.xoxoisme.watched.domain.content.controller;
 
-import com.xoxoisme.watched.domain.content.dto.ContentCreateRequest;
-import com.xoxoisme.watched.domain.content.dto.ContentResponse;
-import com.xoxoisme.watched.domain.content.dto.TmdbSearchResponse;
+import com.xoxoisme.watched.domain.content.dto.request.ContentCreateRequest;
+import com.xoxoisme.watched.domain.content.dto.response.ContentResponse;
+import com.xoxoisme.watched.domain.content.dto.response.TmdbSearchResponse;
 import com.xoxoisme.watched.domain.content.entity.ContentType;
 import com.xoxoisme.watched.domain.content.service.ContentService;
 import com.xoxoisme.watched.domain.content.service.TmdbService;
