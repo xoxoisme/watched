@@ -4,9 +4,11 @@ import type { Content } from "@/lib/mockData";
 export default function Hero({ content }: { content: Content }) {
   return (
     <section className="relative h-[85vh] min-h-[560px] w-full overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${content.backdropUrl})` }}
+      <img
+        src={content.backdropUrl}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />

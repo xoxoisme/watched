@@ -24,12 +24,18 @@ export default function SignupPage() {
       await signup({ email, password, nickname, birthDate });
       router.push("/login?signup=success");
     } catch (err: unknown) {
-      const message =
-        typeof err === "object" && err && "response" in err
-          ? (err as { response?: { data?: { message?: string } } }).response?.data
-              ?.message
-          : undefined;
-      setError(message ?? "회원가입에 실패했습니다. 입력값을 확인해주세요.");
+      const e = err as {
+        response?: { data?: { message?: string } };
+        message?: string;
+        code?: string;
+      };
+      if (!e.response) {
+        setError(
+          "서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인해주세요."
+        );
+      } else {
+        setError(e.response.data?.message ?? "회원가입에 실패했습니다.");
+      }
     } finally {
       setSubmitting(false);
     }

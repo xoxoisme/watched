@@ -28,13 +28,20 @@ export default function LoginPage() {
       setUser(profile);
       router.push("/");
     } catch (err: unknown) {
-      const status =
-        typeof err === "object" && err && "response" in err
-          ? (err as { response?: { status?: number } }).response?.status
-          : undefined;
-      if (status === 404) setError("등록되지 않은 이메일입니다.");
-      else if (status === 400) setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-      else setError("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      const e = err as {
+        response?: { status?: number; data?: { message?: string } };
+      };
+      if (!e.response) {
+        setError(
+          "서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인해주세요."
+        );
+      } else if (e.response.status === 404) {
+        setError("등록되지 않은 이메일입니다.");
+      } else if (e.response.status === 400) {
+        setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        setError(e.response.data?.message ?? "로그인에 실패했습니다.");
+      }
     } finally {
       setSubmitting(false);
     }
