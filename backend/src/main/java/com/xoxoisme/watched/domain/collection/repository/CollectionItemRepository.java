@@ -8,4 +8,5 @@ import java.util.List;
 public interface CollectionItemRepository extends JpaRepository<CollectionItem, Long> {
     List<CollectionItem> findByCollectionId(Long collectionId);
     boolean existsByCollectionIdAndContentId(Long collectionId, Long contentId);
+    void deleteByCollectionId(Long collectionId);
 }

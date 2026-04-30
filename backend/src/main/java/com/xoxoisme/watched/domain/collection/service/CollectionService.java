@@ -67,7 +67,9 @@ public class CollectionService {
 
     @Transactional
     public void delete(Long userId, Long collectionId) {
-        collectionRepository.delete(getOwnedCollection(collectionId, userId));
+        Collection collection = getOwnedCollection(collectionId, userId);
+        collectionItemRepository.deleteByCollectionId(collectionId);
+        collectionRepository.delete(collection);
     }
 
     @Transactional
