@@ -32,6 +32,11 @@ public class UserController {
         return ApiResponse.ok(userService.login(request));
     }
 
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout() {
+        return ApiResponse.ok();
+    }
+
     @GetMapping("/me")
     public ApiResponse<UserProfileResponse> getProfile(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
