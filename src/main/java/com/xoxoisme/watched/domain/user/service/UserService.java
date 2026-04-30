@@ -3,6 +3,8 @@ package com.xoxoisme.watched.domain.user.service;
 import com.xoxoisme.watched.domain.user.dto.LoginRequest;
 import com.xoxoisme.watched.domain.user.dto.SignupRequest;
 import com.xoxoisme.watched.domain.user.dto.TokenResponse;
+import com.xoxoisme.watched.domain.user.dto.request.UserUpdateRequest;
+import com.xoxoisme.watched.domain.user.dto.response.UserProfileResponse;
 import com.xoxoisme.watched.domain.user.entity.User;
 import com.xoxoisme.watched.domain.user.repository.UserRepository;
 import com.xoxoisme.watched.global.common.exception.BusinessException;
@@ -15,11 +17,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    public UserProfileResponse getProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return UserProfileResponse.from(user);
+    }
+
+    @Transactional
+    public UserProfileResponse updateProfile(Long userId, UserUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.update(request.nickname(), request.profileImageUrl());
+        return UserProfileResponse.from(user);
+    }
 
     @Transactional
     public void signup(SignupRequest request) {
@@ -39,7 +56,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
     public TokenResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));

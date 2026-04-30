@@ -39,4 +39,9 @@ public class User extends BaseTimeEntity {
         user.birthDate = birthDate;
         return user;
     }
+
+    public void update(String nickname, String profileImageUrl) {
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+    }
 }
