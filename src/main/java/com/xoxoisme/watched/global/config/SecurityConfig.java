@@ -37,6 +37,8 @@ public class SecurityConfig {
                                 "/api/contents/search",
                                 "/api/contents/{id}",
                                 "/api/contents/tmdb/{tmdbId}",
+                                "/api/reviews/contents/{contentId}",
+                                "/api/ratings/contents/{contentId}",
                                 "/h2-console/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
