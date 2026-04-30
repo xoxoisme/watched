@@ -57,7 +57,9 @@ Thumbs.db
 .env
 .env.*
 application-local.yml
+application-local.yaml
 application-local.properties
+application-local-yaml
 src/test/resources/application.yaml
 backend/src/test/resources/application.yaml
 
