@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { Plus, Play, Info } from "lucide-react";
 import type { Content } from "@/lib/mockData";
 
 export default function Hero({ content }: { content: Content }) {
+  const detailHref = `/contents/${content.id}?type=${content.type}`;
   return (
     <section className="relative h-[85vh] min-h-[560px] w-full overflow-hidden">
       <img
@@ -31,20 +33,27 @@ export default function Hero({ content }: { content: Content }) {
           {content.overview}
         </p>
         <div className="flex flex-wrap items-center gap-3">
-          <button className="flex items-center gap-2 rounded bg-white px-6 py-2.5 font-semibold text-black transition hover:bg-white/85">
+          <Link
+            href={detailHref}
+            className="flex items-center gap-2 rounded bg-white px-6 py-2.5 font-semibold text-black transition hover:bg-white/85"
+          >
             <Play size={18} fill="currentColor" />
-            기록 보기
-          </button>
-          <button className="flex items-center gap-2 rounded bg-white/20 px-6 py-2.5 font-semibold text-white backdrop-blur transition hover:bg-white/30">
+            상세 보기
+          </Link>
+          <Link
+            href="/collections/me"
+            className="flex items-center gap-2 rounded bg-white/20 px-6 py-2.5 font-semibold text-white backdrop-blur transition hover:bg-white/30"
+          >
             <Plus size={18} />
             컬렉션 추가
-          </button>
-          <button
+          </Link>
+          <Link
+            href={detailHref}
             aria-label="상세 정보"
             className="grid h-11 w-11 place-items-center rounded-full border border-white/40 text-white/90 transition hover:border-white"
           >
             <Info size={18} />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

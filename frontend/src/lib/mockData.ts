@@ -1,3 +1,5 @@
+import type { PosterItem } from "@/components/PosterCard";
+
 export type Content = {
   id: number;
   title: string;
@@ -8,6 +10,15 @@ export type Content = {
   type: "MOVIE" | "TV";
   overview: string;
 };
+
+export const toPosterItem = (c: Content): PosterItem => ({
+  id: c.id,
+  href: `/contents/${c.id}?type=${c.type}`,
+  title: c.title,
+  posterUrl: c.posterUrl,
+  year: c.releaseDate.slice(0, 4),
+  rating: c.voteAverage,
+});
 
 const POSTER = (path: string) => `https://image.tmdb.org/t/p/w500${path}`;
 const BACKDROP = (path: string) => `https://image.tmdb.org/t/p/original${path}`;

@@ -3,12 +3,11 @@
 import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import PosterCard from "./PosterCard";
-import type { Content } from "@/lib/mockData";
+import PosterCard, { type PosterItem } from "./PosterCard";
 
 type Props = {
   title: string;
-  items: Content[];
+  items: PosterItem[];
 };
 
 export default function ContentRow({ title, items }: Props) {
@@ -20,6 +19,8 @@ export default function ContentRow({ title, items }: Props) {
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  if (items.length === 0) return null;
 
   return (
     <section className="group/row relative py-3">
