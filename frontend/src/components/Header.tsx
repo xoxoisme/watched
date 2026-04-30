@@ -70,9 +70,9 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-4 text-white/90">
-          <button aria-label="검색" className="hover:text-white">
+          <Link href="/search" aria-label="검색" className="hover:text-white">
             <Search size={20} />
-          </button>
+          </Link>
           <button aria-label="알림" className="hover:text-white">
             <Bell size={20} />
           </button>
