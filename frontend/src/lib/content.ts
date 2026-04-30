@@ -22,3 +22,8 @@ export async function fetchContentByTmdbId(
   );
   return data.data;
 }
+
+export async function fetchContentById(id: number): Promise<Content> {
+  const { data } = await api.get<ApiResponse<Content>>(`/api/contents/${id}`);
+  return data.data;
+}

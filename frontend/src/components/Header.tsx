@@ -7,7 +7,13 @@ import { Bell, Search, LogOut, User } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 import { logout as apiLogout } from "@/lib/auth";
 
-const NAV_ITEMS = ["홈", "시청 중", "즐겨찾기", "컬렉션", "리뷰"];
+const NAV_ITEMS: { label: string; href: string }[] = [
+  { label: "홈", href: "/" },
+  { label: "시청 중", href: "/my/watch" },
+  { label: "즐겨찾기", href: "/my/favorites" },
+  { label: "컬렉션", href: "/collections/me" },
+  { label: "리뷰", href: "/my/reviews" },
+];
 
 export default function Header() {
   const router = useRouter();
@@ -55,16 +61,14 @@ export default function Header() {
             WATCHED
           </Link>
           <nav className="hidden items-center gap-5 text-sm md:flex">
-            {NAV_ITEMS.map((item, i) => (
-              <a
-                key={item}
-                href="#"
-                className={`transition-colors hover:text-white/70 ${
-                  i === 0 ? "font-semibold text-white" : "text-white/80"
-                }`}
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-white/80 transition-colors hover:text-white"
               >
-                {item}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </nav>
         </div>
