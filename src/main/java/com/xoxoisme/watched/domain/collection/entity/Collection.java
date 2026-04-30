@@ -25,4 +25,19 @@ public class Collection extends BaseTimeEntity {
 
     @Column(nullable = false, name = "is_public")
     private boolean isPublic;
+
+    public static Collection create(User user, String name, String description, boolean isPublic) {
+        Collection collection = new Collection();
+        collection.user = user;
+        collection.name = name;
+        collection.description = description;
+        collection.isPublic = isPublic;
+        return collection;
+    }
+
+    public void update(String name, String description, boolean isPublic) {
+        this.name = name;
+        this.description = description;
+        this.isPublic = isPublic;
+    }
 }
