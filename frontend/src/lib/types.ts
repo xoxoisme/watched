@@ -97,6 +97,23 @@ export type FavoriteRecord = {
   posterPath: string;
 };
 
+// ── Collection ────────────────────────────────────
+export type CollectionItem = {
+  id: number;
+  contentId: number;
+  contentTitle: string;
+  posterPath: string;
+};
+
+export type Collection = {
+  id: number;
+  userId: number;
+  name: string;
+  description: string;
+  isPublic: boolean;
+  items: CollectionItem[];
+};
+
 // ── Review ────────────────────────────────────────
 export type ReviewRecord = {
   id: number;
