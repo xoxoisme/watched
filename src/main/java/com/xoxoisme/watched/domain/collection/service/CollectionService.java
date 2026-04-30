@@ -46,9 +46,12 @@ public class CollectionService {
                 .toList();
     }
 
-    public CollectionResponse getById(Long collectionId) {
+    public CollectionResponse getById(Long userId, Long collectionId) {
         Collection collection = collectionRepository.findById(collectionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.COLLECTION_NOT_FOUND));
+        if (!collection.isPublic() && !collection.getUser().getId().equals(userId)) {
+            throw new BusinessException(ErrorCode.COLLECTION_NOT_FOUND);
+        }
         List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(collectionId).stream()
                 .map(CollectionItemResponse::from)
                 .toList();

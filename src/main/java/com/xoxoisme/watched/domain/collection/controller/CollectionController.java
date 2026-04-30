@@ -36,8 +36,9 @@ public class CollectionController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<CollectionResponse> getById(@PathVariable Long id) {
-        return ApiResponse.ok(collectionService.getById(id));
+    public ApiResponse<CollectionResponse> getById(@PathVariable Long id, Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ApiResponse.ok(collectionService.getById(userId, id));
     }
 
     @PutMapping("/{id}")
