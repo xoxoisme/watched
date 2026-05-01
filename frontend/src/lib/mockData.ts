@@ -35,6 +35,59 @@ export const heroContent: Content = {
     "팝의 황제 마이클 잭슨의 삶과 음악, 그리고 한 시대를 만든 천재 아티스트의 빛과 그늘을 그린 전기 영화."
 };
 
+export const heroContents: Content[] = [
+  {
+    id: 936075,
+    title: "마이클",
+    posterUrl: POSTER("/piMZqtd0gGS7OgkhDwiQ7vVViBQ.jpg"),
+    backdropUrl: BACKDROP("/xBT0oNq6rsTFv4SxG5uGRIEOrq6.jpg"),
+    releaseDate: "2026-04-22",
+    voteAverage: 7.6,
+    type: "MOVIE",
+    overview: "팝의 황제 마이클 잭슨의 삶과 음악, 그리고 한 시대를 만든 천재 아티스트의 빛과 그늘을 그린 전기 영화.",
+  },
+  {
+    id: 95557,
+    title: "인빈시블",
+    posterUrl: POSTER("/pXdOMSrlxc2z4scUsYEPgo0KyV7.jpg"),
+    backdropUrl: BACKDROP("/9qrroces8C6R9aKr08hACNPVXdZ.jpg"),
+    releaseDate: "2021-03-25",
+    voteAverage: 8.6,
+    type: "TV",
+    overview: "평범한 10대 소년 마크 그레이슨은 세상에서 가장 강력한 슈퍼히어로인 아버지의 힘을 물려받으면서 영웅의 길을 걷기 시작한다.",
+  },
+  {
+    id: 687163,
+    title: "프로젝트 헤일메리",
+    posterUrl: POSTER("/qqGpVVZk2KD1lAvccgTU4Z6nh1H.jpg"),
+    backdropUrl: BACKDROP("/8Tfys3mDZVp4tNoH2ktm06a0Tau.jpg"),
+    releaseDate: "2026-03-15",
+    voteAverage: 8.2,
+    type: "MOVIE",
+    overview: "홀로 우주에서 깨어난 과학자 라이랜드 그레이스. 지구를 구할 마지막 임무를 띠고 태양계 너머로 보내진 그는 예상치 못한 존재와 조우한다.",
+  },
+  {
+    id: 202555,
+    title: "데어데블: 본 어게인",
+    posterUrl: POSTER("/qj0N5af5CHGY0MdZehgEzf6WBV3.jpg"),
+    backdropUrl: BACKDROP("/qrTAc0ZtQ859Qu5O8cixJzNJpQs.jpg"),
+    releaseDate: "2025-03-04",
+    voteAverage: 8.0,
+    type: "TV",
+    overview: "맹목적인 정의의 사도 맷 머독이 뉴욕의 어둠 속으로 다시 돌아온다. 킹핀의 귀환과 함께 데어데블의 새로운 이야기가 시작된다.",
+  },
+  {
+    id: 37854,
+    title: "원피스",
+    posterUrl: POSTER("/qHjXsSUuolEtbgvYPzRjAuB1VHE.jpg"),
+    backdropUrl: BACKDROP("/4Mt7WHox67uJ1yErwTBFcV8KWgG.jpg"),
+    releaseDate: "1999-10-20",
+    voteAverage: 8.7,
+    type: "TV",
+    overview: "위대한 항로의 끝에 잠들어 있다는 전설의 보물 '원피스'를 찾아 바다로 나선 소년 루피와 동료들의 모험 이야기.",
+  },
+];
+
 type T = "MOVIE" | "TV";
 
 const make = (

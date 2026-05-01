@@ -7,11 +7,12 @@ const config: Config = {
       colors: {
         background: "#141414",
         surface: "#1f1f1f",
-        accent: "#e50914",
+        accent: "#4ade80",
         muted: "#808080"
       },
       fontFamily: {
-        sans: ["var(--font-pretendard)", "system-ui", "sans-serif"]
+        sans: ["var(--font-pretendard)", "system-ui", "sans-serif"],
+        brand: ["var(--font-brand)", "sans-serif"]
       }
     }
   },

@@ -27,3 +27,8 @@ export async function fetchMyProfile(): Promise<UserProfile> {
   const { data } = await api.get<ApiResponse<UserProfile>>("/api/users/me");
   return data.data;
 }
+
+export async function updateProfile(payload: { nickname: string; profileImageUrl: string | null }): Promise<UserProfile> {
+  const { data } = await api.put<ApiResponse<UserProfile>>("/api/users/me", payload);
+  return data.data;
+}

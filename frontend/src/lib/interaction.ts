@@ -45,6 +45,13 @@ export async function createRating(contentId: number, score: number): Promise<Ra
   return data.data;
 }
 
+export async function getMyRatingForContent(contentId: number): Promise<RatingRecord | null> {
+  const { data } = await api.get<ApiResponse<RatingRecord | null>>(
+    `/api/ratings/me/contents/${contentId}`
+  );
+  return data.data;
+}
+
 export async function getAverageRating(contentId: number): Promise<RatingAverage> {
   const { data } = await api.get<ApiResponse<RatingAverage>>(
     `/api/ratings/contents/${contentId}`
@@ -110,4 +117,11 @@ export async function updateReview(reviewId: number, reviewContent: string): Pro
 
 export async function deleteReview(reviewId: number): Promise<void> {
   await api.delete(`/api/reviews/${reviewId}`);
+}
+
+export async function toggleReviewLike(reviewId: number): Promise<{ likeCount: number; likedByMe: boolean }> {
+  const { data } = await api.post<ApiResponse<{ likeCount: number; likedByMe: boolean }>>(
+    `/api/reviews/${reviewId}/likes`
+  );
+  return data.data;
 }

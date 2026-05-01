@@ -35,6 +35,7 @@ export type TmdbContent = {
   title: string;
   originalTitle: string;
   posterUrl: string;
+  backdropUrl: string | null;
   releaseDate: string | null;
   overview: string;
   voteAverage: number;
@@ -57,13 +58,12 @@ export const TMDB_IMAGE = (path: string, size: "w500" | "original" = "w500") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : "";
 
 // ── Watch ─────────────────────────────────────────
-export type WatchStatus = "WATCHING" | "COMPLETED" | "PLAN_TO_WATCH" | "DROPPED";
+export type WatchStatus = "WATCHING" | "COMPLETED" | "PLAN_TO_WATCH";
 
 export const WATCH_LABELS: Record<WatchStatus, string> = {
   WATCHING: "시청 중",
   COMPLETED: "완료",
   PLAN_TO_WATCH: "볼 예정",
-  DROPPED: "하차",
 };
 
 export type WatchRecord = {
@@ -93,6 +93,7 @@ export type RatingAverage = {
 export type FavoriteRecord = {
   id: number;
   contentId: number;
+  tmdbId: number;
   contentTitle: string;
   posterPath: string;
 };
@@ -121,7 +122,10 @@ export type ReviewRecord = {
   contentTitle: string;
   userId: number;
   userNickname: string;
+  userProfileImageUrl: string | null;
   reviewContent: string;
+  likeCount: number;
+  likedByMe: boolean;
   createdAt: string;
   updatedAt: string;
 };
