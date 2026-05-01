@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, Play, Info } from "lucide-react";
+import { Plus, Play } from "lucide-react";
 import type { Content } from "@/lib/mockData";
 
 export default function Hero({ content }: { content: Content }) {
@@ -23,11 +23,7 @@ export default function Hero({ content }: { content: Content }) {
           {content.title}
         </h1>
         <div className="mb-4 flex items-center gap-3 text-sm text-white/80">
-          <span className="font-semibold text-green-400">
-            {Math.round(content.voteAverage * 10)}% 일치
-          </span>
           <span>{content.releaseDate.slice(0, 4)}</span>
-          <span className="rounded border border-white/40 px-1.5 text-xs">HD</span>
         </div>
         <p className="mb-6 line-clamp-3 text-base text-white/90 md:text-lg">
           {content.overview}
@@ -46,13 +42,6 @@ export default function Hero({ content }: { content: Content }) {
           >
             <Plus size={18} />
             컬렉션 추가
-          </Link>
-          <Link
-            href={detailHref}
-            aria-label="상세 정보"
-            className="grid h-11 w-11 place-items-center rounded-full border border-white/40 text-white/90 transition hover:border-white"
-          >
-            <Info size={18} />
           </Link>
         </div>
       </div>

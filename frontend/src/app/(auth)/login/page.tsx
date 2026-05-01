@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { login, fetchMyProfile } from "@/lib/auth";
@@ -9,6 +9,8 @@ import { useAuthStore } from "@/stores/authStore";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") ?? "/";
   const setToken = useAuthStore((s) => s.setToken);
   const setUser = useAuthStore((s) => s.setUser);
 
@@ -26,7 +28,7 @@ export default function LoginPage() {
       setToken(accessToken);
       const profile = await fetchMyProfile();
       setUser(profile);
-      router.push("/");
+      router.push(next);
     } catch (err: unknown) {
       const e = err as {
         response?: { status?: number; data?: { message?: string } };

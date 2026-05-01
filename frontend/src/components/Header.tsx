@@ -3,16 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bell, Search, LogOut, User } from "lucide-react";
+import { BookMarked, Heart, Search, LogOut, User } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 import { logout as apiLogout } from "@/lib/auth";
 
 const NAV_ITEMS: { label: string; href: string }[] = [
-  { label: "홈", href: "/" },
-  { label: "시청 중", href: "/my/watch" },
-  { label: "즐겨찾기", href: "/my/favorites" },
+  { label: "시청 기록", href: "/my/watch" },
   { label: "컬렉션", href: "/collections/me" },
-  { label: "리뷰", href: "/my/reviews" },
 ];
 
 export default function Header() {
@@ -57,7 +54,7 @@ export default function Header() {
     >
       <div className="flex items-center justify-between px-4 py-4 md:px-12">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-2xl font-black tracking-tight text-accent">
+          <Link href="/" className="font-brand text-3xl tracking-widest text-accent">
             WATCHED
           </Link>
           <nav className="hidden items-center gap-5 text-sm md:flex">
@@ -77,20 +74,22 @@ export default function Header() {
           <Link href="/search" aria-label="검색" className="hover:text-white">
             <Search size={20} />
           </Link>
-          <button aria-label="알림" className="hover:text-white">
-            <Bell size={20} />
-          </button>
 
           {isAuthed ? (
             <div className="relative">
               <button
                 onClick={() => setMenuOpen((v) => !v)}
-                className="flex items-center gap-2 rounded bg-white/10 px-2.5 py-1.5 hover:bg-white/20"
+                className="rounded hover:opacity-80 transition"
               >
-                <span className="grid h-6 w-6 place-items-center rounded bg-accent text-xs font-bold">
-                  {user?.nickname?.[0] ?? "U"}
-                </span>
-                <span className="hidden text-sm md:inline">{user?.nickname}</span>
+                {user?.profileImageUrl ? (
+                  <img
+                    src={user.profileImageUrl}
+                    alt={user.nickname}
+                    className="h-7 w-7 rounded-full object-cover mt-1"
+                  />
+                ) : (
+                  <User size={20} className="text-white/90 hover:text-white" />
+                )}
               </button>
 
               {menuOpen && (
@@ -100,14 +99,24 @@ export default function Header() {
                     <p className="truncate text-xs text-white/50">{user?.email}</p>
                   </div>
                   <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      router.push("/me");
-                    }}
+                    onClick={() => { setMenuOpen(false); router.push("/me"); }}
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
                   >
                     <User size={14} /> 프로필
                   </button>
+                  <button
+                    onClick={() => { setMenuOpen(false); router.push("/my/favorites"); }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    <Heart size={14} /> 즐겨찾기
+                  </button>
+                  <button
+                    onClick={() => { setMenuOpen(false); router.push("/my/reviews"); }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    <BookMarked size={14} /> 리뷰
+                  </button>
+                  <div className="border-t border-white/10" />
                   <button
                     onClick={onLogout}
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-white/80 hover:bg-white/10"

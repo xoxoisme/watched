@@ -21,7 +21,6 @@ export default function FavoriteButton({ active, onClick, loading }: Props) {
       }`}
     >
       <Heart size={15} className={active ? "fill-white" : ""} />
-      {active ? "즐겨찾기" : "즐겨찾기 추가"}
     </button>
   );
 }

@@ -12,7 +12,9 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthYear, setBirthYear] = useState("");
+  const [birthMonth, setBirthMonth] = useState("");
+  const [birthDay, setBirthDay] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,8 +23,9 @@ export default function SignupPage() {
     setError(null);
     setSubmitting(true);
     try {
+      const birthDate = `${birthYear}-${birthMonth.padStart(2, "0")}-${birthDay.padStart(2, "0")}`;
       await signup({ email, password, nickname, birthDate });
-      router.push("/login?signup=success");
+      router.push("/login?next=/onboarding");
     } catch (err: unknown) {
       const e = err as {
         response?: { data?: { message?: string } };
@@ -80,13 +83,44 @@ export default function SignupPage() {
         />
         <div>
           <label className="mb-1 block text-xs text-white/60">생년월일</label>
-          <input
-            type="date"
-            required
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            className="w-full rounded bg-white/10 px-4 py-3.5 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
-          />
+          <div className="flex gap-2">
+            <input
+              type="number"
+              placeholder="연도"
+              required
+              min={1900}
+              max={2099}
+              value={birthYear}
+              onChange={(e) => {
+                if (e.target.value.length <= 4) setBirthYear(e.target.value);
+              }}
+              className="w-28 rounded bg-white/10 px-4 py-3.5 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
+            />
+            <input
+              type="number"
+              placeholder="월"
+              required
+              min={1}
+              max={12}
+              value={birthMonth}
+              onChange={(e) => {
+                if (e.target.value.length <= 2) setBirthMonth(e.target.value);
+              }}
+              className="w-20 rounded bg-white/10 px-4 py-3.5 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
+            />
+            <input
+              type="number"
+              placeholder="일"
+              required
+              min={1}
+              max={31}
+              value={birthDay}
+              onChange={(e) => {
+                if (e.target.value.length <= 2) setBirthDay(e.target.value);
+              }}
+              className="flex-1 rounded bg-white/10 px-4 py-3.5 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
+            />
+          </div>
         </div>
 
         {error && (

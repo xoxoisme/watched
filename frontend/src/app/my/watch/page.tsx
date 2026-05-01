@@ -14,7 +14,6 @@ const TABS: { label: string; value: WatchStatus | "ALL" }[] = [
   { label: "시청 중", value: "WATCHING" },
   { label: "완료", value: "COMPLETED" },
   { label: "볼 예정", value: "PLAN_TO_WATCH" },
-  { label: "하차", value: "DROPPED" },
 ];
 
 export default function MyWatchPage() {
@@ -56,9 +55,9 @@ export default function MyWatchPage() {
     <main className="min-h-screen bg-background">
       <Header />
       <div className="px-4 pt-28 pb-16 md:px-12">
-        <h1 className="mb-6 text-2xl font-black">내 시청 기록</h1>
+        <h1 className="mb-6 text-center text-2xl font-black">내 시청 기록</h1>
 
-        <div className="mb-6 flex gap-1 border-b border-white/10">
+        <div className="mb-6 flex justify-center gap-1 border-b border-white/10">
           {TABS.map((t) => (
             <button
               key={t.value}

@@ -147,7 +147,7 @@ export default function CollectionDetailPage() {
   return (
     <main className="min-h-screen bg-background">
       <Header />
-      <div className="px-4 pt-28 pb-16 md:px-12 max-w-5xl">
+      <div className="px-4 pt-28 pb-16 md:px-12 max-w-5xl mx-auto">
 
         {/* Header */}
         <div className="mb-8">

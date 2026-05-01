@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className="px-4 py-5 md:px-12">
-          <a href="/" className="text-3xl font-black tracking-tight text-accent">
+          <a href="/" className="font-brand text-3xl tracking-widest text-accent">
             WATCHED
           </a>
         </header>
