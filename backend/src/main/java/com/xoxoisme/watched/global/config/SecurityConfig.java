@@ -41,6 +41,10 @@ public class SecurityConfig {
                                 "/api/users/signup",
                                 "/api/users/login",
                                 "/api/contents/search",
+                                "/api/contents/trending",
+                                "/api/contents/recommendations",
+                                "/api/contents/top/movies",
+                                "/api/contents/top/tv",
                                 "/api/contents/{id}",
                                 "/api/contents/tmdb/{tmdbId}",
                                 "/api/reviews/contents/{contentId}",
@@ -61,7 +65,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of(
+            "http://localhost:3000",
+            "http://192.168.*.*:3000",
+            "http://10.*.*.*:3000"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

@@ -42,7 +42,13 @@ public class CollectionService {
 
     public List<CollectionResponse> getMyCollections(Long userId) {
         return collectionRepository.findByUserId(userId).stream()
-                .map(CollectionResponse::from)
+                .map(collection -> {
+                    List<CollectionItemResponse> items = collectionItemRepository
+                            .findByCollectionId(collection.getId()).stream()
+                            .map(CollectionItemResponse::from)
+                            .toList();
+                    return CollectionResponse.from(collection, items);
+                })
                 .toList();
     }
 

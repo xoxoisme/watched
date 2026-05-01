@@ -10,6 +10,7 @@ public record TmdbSearchResponse(
         String title,
         String originalTitle,
         String posterUrl,
+        String backdropUrl,
         LocalDate releaseDate,
         String overview,
         BigDecimal voteAverage,

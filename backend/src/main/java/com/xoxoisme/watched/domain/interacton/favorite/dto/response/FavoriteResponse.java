@@ -5,6 +5,7 @@ import com.xoxoisme.watched.domain.interacton.favorite.entity.Favorite;
 public record FavoriteResponse(
         Long id,
         Long contentId,
+        Long tmdbId,
         String contentTitle,
         String posterPath
 ) {
@@ -12,6 +13,7 @@ public record FavoriteResponse(
         return new FavoriteResponse(
                 favorite.getId(),
                 favorite.getContent().getId(),
+                favorite.getContent().getTmdbId(),
                 favorite.getContent().getTitle(),
                 favorite.getContent().getPosterPath()
         );

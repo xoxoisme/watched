@@ -10,18 +10,24 @@ public record ReviewResponse(
         String contentTitle,
         Long userId,
         String userNickname,
+        String userProfileImageUrl,
         String reviewContent,
+        long likeCount,
+        boolean likedByMe,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public static ReviewResponse from(Review review) {
+    public static ReviewResponse from(Review review, long likeCount, boolean likedByMe) {
         return new ReviewResponse(
                 review.getId(),
                 review.getContent().getId(),
                 review.getContent().getTitle(),
                 review.getUser().getId(),
                 review.getUser().getNickname(),
+                review.getUser().getProfileImageUrl(),
                 review.getReviewContent(),
+                likeCount,
+                likedByMe,
                 review.getCreatedAt(),
                 review.getUpdatedAt()
         );

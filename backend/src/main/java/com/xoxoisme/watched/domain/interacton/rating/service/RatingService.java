@@ -38,6 +38,12 @@ public class RatingService {
         return RatingResponse.from(ratingRepository.save(Rating.create(user, content, request.score())));
     }
 
+    public RatingResponse getMyRatingForContent(Long userId, Long contentId) {
+        return ratingRepository.findByUserIdAndContentId(userId, contentId)
+                .map(RatingResponse::from)
+                .orElse(null);
+    }
+
     public RatingAverageResponse getAverageByContent(Long contentId) {
         BigDecimal avg = ratingRepository.findAverageScoreByContentId(contentId)
                 .orElse(BigDecimal.ZERO);

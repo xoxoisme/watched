@@ -2,6 +2,7 @@ package com.xoxoisme.watched.domain.review.controller;
 
 import com.xoxoisme.watched.domain.review.dto.request.ReviewCreateRequest;
 import com.xoxoisme.watched.domain.review.dto.request.ReviewUpdateRequest;
+import com.xoxoisme.watched.domain.review.dto.response.ReviewLikeResponse;
 import com.xoxoisme.watched.domain.review.dto.response.ReviewResponse;
 import com.xoxoisme.watched.domain.review.service.ReviewService;
 import com.xoxoisme.watched.global.common.response.ApiResponse;
@@ -28,8 +29,9 @@ public class ReviewController {
     }
 
     @GetMapping("/contents/{contentId}")
-    public ApiResponse<List<ReviewResponse>> getByContent(@PathVariable Long contentId) {
-        return ApiResponse.ok(reviewService.getByContent(contentId));
+    public ApiResponse<List<ReviewResponse>> getByContent(@PathVariable Long contentId, Authentication authentication) {
+        Long userId = authentication != null ? (Long) authentication.getPrincipal() : null;
+        return ApiResponse.ok(reviewService.getByContent(contentId, userId));
     }
 
     @GetMapping("/me")
@@ -49,5 +51,11 @@ public class ReviewController {
     public void delete(@PathVariable Long id, Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         reviewService.delete(userId, id);
+    }
+
+    @PostMapping("/{id}/likes")
+    public ApiResponse<ReviewLikeResponse> toggleLike(@PathVariable Long id, Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ApiResponse.ok(reviewService.toggleLike(userId, id));
     }
 }

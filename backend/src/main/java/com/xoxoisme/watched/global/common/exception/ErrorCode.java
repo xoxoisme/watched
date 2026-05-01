@@ -28,6 +28,7 @@ public enum ErrorCode {
     // ========== Review ==========
     REVIEW_NOT_FOUND("RV001", HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
     REVIEW_ALREADY_EXISTS("RV002", HttpStatus.CONFLICT, "이미 작성한 리뷰가 있습니다."),
+    REVIEW_LIKE_NOT_FOUND("RV003", HttpStatus.NOT_FOUND, "좋아요를 찾을 수 없습니다."),
 
     // ========== Rating ==========
     RATING_NOT_FOUND("RT001", HttpStatus.NOT_FOUND, "존재하지 않는 평점입니다."),

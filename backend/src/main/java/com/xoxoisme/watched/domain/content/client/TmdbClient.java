@@ -1,8 +1,10 @@
 package com.xoxoisme.watched.domain.content.client;
 
+import com.xoxoisme.watched.domain.content.client.dto.TmdbTrendingResult;
 import com.xoxoisme.watched.domain.content.client.dto.TmdbTvResult;
 import com.xoxoisme.watched.domain.content.client.dto.request.TmdbMovieResult;
 import com.xoxoisme.watched.domain.content.client.dto.response.TmdbPageResponse;
+import com.xoxoisme.watched.domain.content.dto.response.TmdbSearchResponse;
 import com.xoxoisme.watched.global.config.TmdbProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -53,8 +55,48 @@ public class TmdbClient {
                 .body(TmdbTvResult.class);
     }
 
-    public String buildImageUrl(String posterPath) {
-        if (posterPath == null) return null;
-        return properties.imageBaseUrl() + posterPath;
+    public TmdbPageResponse<TmdbTrendingResult> getTrending() {
+        return restClient.get()
+                .uri("/trending/all/week?language=ko-KR")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public TmdbPageResponse<TmdbTrendingResult> getTrendingMovies() {
+        return restClient.get()
+                .uri("/trending/movie/week?language=ko-KR")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public TmdbPageResponse<TmdbTrendingResult> getTrendingTv() {
+        return restClient.get()
+                .uri("/trending/tv/week?language=ko-KR")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public TmdbPageResponse<TmdbTrendingResult> getMovieRecommendations(Long tmdbId) {
+        return restClient.get()
+                .uri("/movie/{movie_id}/recommendations?language=ko-KR", tmdbId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public TmdbPageResponse<TmdbTrendingResult> getTvRecommendations(Long TmdbId) {
+        return restClient.get()
+                .uri("/tv/{series_id}/recommendations?language=ko-KR", TmdbId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    public String buildImageUrl(String path) {
+        if (path == null) return null;
+        return properties.imageBaseUrl() + path;
+    }
+
+    public String buildBackdropUrl(String path) {
+        if (path == null) return null;
+        return "https://image.tmdb.org/t/p/original" + path;
     }
 }

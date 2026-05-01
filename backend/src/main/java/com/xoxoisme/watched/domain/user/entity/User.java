@@ -22,7 +22,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 60)
     private String password;
 
-    @Column(nullable = true, length = 255, name = "profile_image")
+    @Column(nullable = true, columnDefinition = "TEXT", name = "profile_image")
     private String profileImageUrl;
 
     @Column(nullable = false, length = 20)

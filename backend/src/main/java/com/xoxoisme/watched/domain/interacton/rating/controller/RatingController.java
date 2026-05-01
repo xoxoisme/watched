@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/ratings")
 @RequiredArgsConstructor
@@ -24,6 +25,12 @@ public class RatingController {
     public ApiResponse<RatingResponse> create(@RequestBody @Valid RatingCreateRequest request, Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         return ApiResponse.ok(ratingService.create(userId, request));
+    }
+
+    @GetMapping("/me/contents/{contentId}")
+    public ApiResponse<RatingResponse> getMyRatingForContent(@PathVariable Long contentId, Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ApiResponse.ok(ratingService.getMyRatingForContent(userId, contentId));
     }
 
     @GetMapping("/contents/{contentId}")

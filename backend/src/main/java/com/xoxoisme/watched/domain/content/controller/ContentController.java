@@ -10,6 +10,7 @@ import com.xoxoisme.watched.global.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,27 @@ public class ContentController {
 
     private final ContentService contentService;
     private final TmdbService tmdbService;
+
+    @GetMapping("/trending")
+    public ApiResponse<List<TmdbSearchResponse>> trending() {
+        return ApiResponse.ok(tmdbService.getTrending());
+    }
+
+    @GetMapping("/top/movies")
+    public ApiResponse<List<TmdbSearchResponse>> topMovies() {
+        return ApiResponse.ok(tmdbService.getTopMovies());
+    }
+
+    @GetMapping("/top/tv")
+    public ApiResponse<List<TmdbSearchResponse>> topTv() {
+        return ApiResponse.ok(tmdbService.getTopTv());
+    }
+
+    @GetMapping("/recommendations")
+    public ApiResponse<List<TmdbSearchResponse>> recommendations(Authentication authentication) {
+        Long userId = authentication != null ? (Long) authentication.getPrincipal() : null;
+        return ApiResponse.ok(tmdbService.getRecommendations(userId));
+    }
 
     @GetMapping("/search")
     public ApiResponse<List<TmdbSearchResponse>> search(

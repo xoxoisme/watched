@@ -9,6 +9,7 @@ public record TmdbTvResult(
         @JsonProperty("name") String name,
         @JsonProperty("original_name") String originalName,
         @JsonProperty("poster_path") String posterPath,
+        @JsonProperty("backdrop_path") String backdropPath,
         @JsonProperty("first_air_date") String firstAirDate,
         @JsonProperty("overview") String overview,
         @JsonProperty("vote_average") BigDecimal voteAverage
