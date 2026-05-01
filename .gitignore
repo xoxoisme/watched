@@ -16,6 +16,7 @@ frontend/.next/
 frontend/out/
 frontend/.vercel
 frontend/next-env.d.ts
+frontend/tsconfig.tsbuildinfo
 
 # =========================
 # Logs
