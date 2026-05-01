@@ -59,3 +59,12 @@ export async function removeItemFromCollection(
 ): Promise<void> {
   await api.delete(`/api/collections/${collectionId}/items/${itemId}`);
 }
+
+export async function getPublicCollections(
+  period: "today" | "month" | "year" | "all"
+): Promise<Collection[]> {
+  const { data } = await api.get<ApiResponse<Collection[]>>(
+    `/api/collections/public?period=${period}`
+  );
+  return data.data;
+}

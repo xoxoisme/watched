@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BookMarked, Heart, Search, LogOut, User } from "lucide-react";
+import { BookMarked, Eye, FolderOpen, Heart, Search, LogOut, User } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 import { logout as apiLogout } from "@/lib/auth";
 
 const NAV_ITEMS: { label: string; href: string }[] = [
-  { label: "시청 기록", href: "/my/watch" },
-  { label: "컬렉션", href: "/collections/me" },
+  { label: "컬렉션", href: "/collections/explore" },
 ];
 
 export default function Header() {
@@ -103,6 +102,18 @@ export default function Header() {
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
                   >
                     <User size={14} /> 프로필
+                  </button>
+                  <button
+                    onClick={() => { setMenuOpen(false); router.push("/my/watch"); }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    <Eye size={14} /> 시청 기록
+                  </button>
+                  <button
+                    onClick={() => { setMenuOpen(false); router.push("/collections/me"); }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    <FolderOpen size={14} /> 내 컬렉션
                   </button>
                   <button
                     onClick={() => { setMenuOpen(false); router.push("/my/favorites"); }}

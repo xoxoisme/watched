@@ -109,9 +109,11 @@ export type CollectionItem = {
 export type Collection = {
   id: number;
   userId: number;
+  ownerNickname: string;
   name: string;
   description: string;
   isPublic: boolean;
+  viewCount: number;
   items: CollectionItem[];
 };
 

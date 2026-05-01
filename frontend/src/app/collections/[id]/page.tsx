@@ -203,7 +203,10 @@ export default function CollectionDetailPage() {
                 {collection.description && (
                   <p className="text-sm text-white/60 mb-1">{collection.description}</p>
                 )}
-                <p className="text-xs text-white/40">{collection.items.length}개의 콘텐츠</p>
+                <div className="flex items-center gap-3 text-xs text-white/40">
+                  <span>{collection.items.length}개의 콘텐츠</span>
+                  <span>조회 수 {collection.viewCount.toLocaleString()}</span>
+                </div>
               </div>
               {isOwner && (
                 <div className="flex shrink-0 gap-2">
