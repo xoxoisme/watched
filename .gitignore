@@ -7,6 +7,7 @@
 backend/build/
 backend/out/
 backend/.gradle/
+/backend/src/main/resources
 
 # =========================
 # Frontend (Next.js)
