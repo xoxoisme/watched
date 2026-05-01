@@ -35,9 +35,15 @@ public class CollectionController {
         return ApiResponse.ok(collectionService.getMyCollections(userId));
     }
 
+    @GetMapping("/public")
+    public ApiResponse<List<CollectionResponse>> getPublicCollections(
+            @RequestParam(defaultValue = "all") String period) {
+        return ApiResponse.ok(collectionService.getPublicCollections(period));
+    }
+
     @GetMapping("/{id}")
     public ApiResponse<CollectionResponse> getById(@PathVariable Long id, Authentication authentication) {
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = authentication != null ? (Long) authentication.getPrincipal() : null;
         return ApiResponse.ok(collectionService.getById(userId, id));
     }
 
