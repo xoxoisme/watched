@@ -7,7 +7,6 @@
 backend/build/
 backend/out/
 backend/.gradle/
-/backend/src/main/resources
 
 # =========================
 # Frontend (Next.js)
@@ -58,11 +57,11 @@ Thumbs.db
 # =========================
 .env
 .env.*
-application-local.yml
-application-local.yaml
-application-local.properties
-application-local-yaml
-src/test/resources/application.yaml
+# .gitignore에 이렇게 추가
+src/main/resources/application.yaml
+src/main/resources/application-dev.yaml
+src/main/resources/application-prod.yaml
+src/main/resources/data.sql
 backend/src/test/resources/application.yaml
 
 # =========================
