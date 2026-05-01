@@ -58,10 +58,11 @@ Thumbs.db
 .env
 .env.*
 # .gitignore에 이렇게 추가
-src/main/resources/application.yaml
-src/main/resources/application-dev.yaml
-src/main/resources/application-prod.yaml
-src/main/resources/data.sql
+backend/src/main/reources/
+backend/src/main/resources/application.yaml
+backend/src/main/resources/application-dev.yaml
+backend/src/main/resources/application-prod.yaml
+backend/src/main/resources/data.sql
 backend/src/test/resources/application.yaml
 
 # =========================
