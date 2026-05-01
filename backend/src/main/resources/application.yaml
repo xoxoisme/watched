@@ -1,28 +1,11 @@
 spring:
   application:
     name: watched
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-      use-new-id-generator-mappings: false
-    show-sql: true
-    defer-datasource-initialization: true
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+  profiles:
+    active: dev
 
 jwt:
-  secret: ${JWT_SECRET}
   expiration: 86400000
 
 tmdb:
-  access-token: ${TMDB_ACCESS_TOKEN}
   image-base-url: https://image.tmdb.org/t/p/w500
