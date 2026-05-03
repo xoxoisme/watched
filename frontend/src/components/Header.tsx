@@ -53,10 +53,10 @@ export default function Header() {
     >
       <div className="flex items-center justify-between px-4 py-4 md:px-12">
         <div className="flex items-center gap-8">
-          <Link href="/" className="font-brand text-3xl tracking-widest text-accent">
+          <Link href="/" className="font-brand text-4xl tracking-tight text-accent">
             WATCHED
           </Link>
-          <nav className="hidden items-center gap-5 text-sm md:flex">
+          <nav className="hidden items-center gap-5 text-base md:flex mt-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
@@ -69,9 +69,9 @@ export default function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4 text-white/90">
-          <Link href="/search" aria-label="검색" className="hover:text-white">
-            <Search size={20} />
+        <div className="flex items-center gap-8 text-white/90">
+          <Link href="/search" aria-label="검색" className="hover:text-white -mt-1">
+            <Search size={27} />
           </Link>
 
           {isAuthed ? (
@@ -87,7 +87,7 @@ export default function Header() {
                     className="h-7 w-7 rounded-full object-cover mt-1"
                   />
                 ) : (
-                  <User size={20} className="text-white/90 hover:text-white" />
+                  <User size={27} className="text-white/90 hover:text-white" />
                 )}
               </button>
 
@@ -110,22 +110,22 @@ export default function Header() {
                     <Eye size={14} /> 시청 기록
                   </button>
                   <button
-                    onClick={() => { setMenuOpen(false); router.push("/collections/me"); }}
-                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
-                  >
-                    <FolderOpen size={14} /> 내 컬렉션
-                  </button>
-                  <button
                     onClick={() => { setMenuOpen(false); router.push("/my/favorites"); }}
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
                   >
                     <Heart size={14} /> 즐겨찾기
                   </button>
                   <button
+                    onClick={() => { setMenuOpen(false); router.push("/collections/me"); }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    <FolderOpen size={14} /> 내 컬렉션
+                  </button>
+                  <button
                     onClick={() => { setMenuOpen(false); router.push("/my/reviews"); }}
                     className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-white/10"
                   >
-                    <BookMarked size={14} /> 리뷰
+                    <BookMarked size={14} /> 내 리뷰
                   </button>
                   <div className="border-t border-white/10" />
                   <button

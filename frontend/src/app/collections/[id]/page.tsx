@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Globe, Lock, Loader2, Pencil, Trash2, Plus, X, Search } from "lucide-react";
+import { Loader2, Pencil, Trash2, Plus, X, Search } from "lucide-react";
 import Header from "@/components/Header";
 import {
   getCollectionById,
@@ -147,12 +147,13 @@ export default function CollectionDetailPage() {
   return (
     <main className="min-h-screen bg-background">
       <Header />
-      <div className="px-4 pt-28 pb-16 md:px-12 max-w-5xl mx-auto">
+      <div className="px-4 pt-28 pb-16 md:px-12">
 
+        <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           {editing ? (
-            <div className="space-y-3 max-w-lg">
+            <div className="space-y-3">
               <input
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
@@ -196,9 +197,6 @@ export default function CollectionDetailPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <h1 className="text-2xl font-black">{collection.name}</h1>
-                  {collection.isPublic
-                    ? <Globe size={16} className="text-white/40" />
-                    : <Lock size={16} className="text-white/40" />}
                 </div>
                 {collection.description && (
                   <p className="text-sm text-white/60 mb-1">{collection.description}</p>
@@ -257,8 +255,8 @@ export default function CollectionDetailPage() {
                     onChange={(e) => setSearchType(e.target.value as ContentType)}
                     className="rounded bg-white/10 px-3 py-2 text-sm outline-none"
                   >
-                    <option value="MOVIE" className="bg-zinc-900">영화</option>
-                    <option value="TV" className="bg-zinc-900">시리즈</option>
+                    <option value="MOVIE" className="bg-black">영화</option>
+                    <option value="TV" className="bg-black">시리즈</option>
                   </select>
                 </div>
 
@@ -303,6 +301,7 @@ export default function CollectionDetailPage() {
             )}
           </div>
         )}
+        </div>{/* /max-w-2xl */}
 
         {/* Items grid */}
         {collection.items.length === 0 ? (

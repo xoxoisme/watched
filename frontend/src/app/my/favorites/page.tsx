@@ -35,7 +35,7 @@ export default function MyFavoritesPage() {
     <main className="min-h-screen bg-background">
       <Header />
       <div className="px-4 pt-28 pb-16 md:px-12">
-        <h1 className="mb-6 text-2xl font-black">즐겨찾기</h1>
+        <h1 className="mb-6 text-2xl font-black text-center">즐겨찾기</h1>
 
         {loading ? (
           <div className="flex justify-center py-20">

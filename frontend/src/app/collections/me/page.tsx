@@ -99,7 +99,7 @@ export default function MyCollectionsPage() {
         <div className="mb-6 flex items-center justify-end">
           <button
             onClick={() => (showForm ? closeForm() : setShowForm(true))}
-            className="flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent/90"
+            className="flex items-center gap-1.5 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold transition hover:bg-white/20 text-white"
           >
             {showForm ? <X size={15} /> : <Plus size={15} />}
             {showForm ? "취소" : "새 컬렉션"}
@@ -157,8 +157,8 @@ export default function MyCollectionsPage() {
                   onChange={(e) => setSearchType(e.target.value as ContentType)}
                   className="rounded bg-white/10 px-3 py-2 text-sm outline-none"
                 >
-                  <option value="MOVIE" className="bg-zinc-900">영화</option>
-                  <option value="TV" className="bg-zinc-900">시리즈</option>
+                  <option value="MOVIE" className="bg-black">영화</option>
+                  <option value="TV" className="bg-black">시리즈</option>
                 </select>
               </div>
 

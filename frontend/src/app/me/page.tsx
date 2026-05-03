@@ -3,15 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BookMarked, Heart, Eye, Camera, Check, X, Loader2 } from "lucide-react";
+import { BookMarked, Heart, Eye, Camera, Check, X, Loader2, User, FolderOpen } from "lucide-react";
 import Header from "@/components/Header";
 import { useAuthStore } from "@/stores/authStore";
 import { updateProfile } from "@/lib/auth";
 
 const MENU = [
-  { href: "/my/watch", icon: Eye, label: "시청 기록", desc: "시청 중 · 완료 · 볼 예정" },
-  { href: "/my/favorites", icon: Heart, label: "즐겨찾기", desc: "내가 즐겨찾기한 콘텐츠" },
-  { href: "/my/reviews", icon: BookMarked, label: "내 리뷰", desc: "내가 작성한 리뷰 모음" },
+  { href: "/my/watch", icon: Eye, label: "시청 기록" },
+  { href: "/my/favorites", icon: Heart, label: "즐겨찾기" },
+  { href: "/collections/me", icon: FolderOpen, label: "내 컬렉션" },
+  { href: "/my/reviews", icon: BookMarked, label: "내 리뷰" },
 ];
 
 export default function MePage() {
@@ -86,8 +87,8 @@ export default function MePage() {
                 className="h-16 w-16 rounded-full object-cover"
               />
             ) : (
-              <div className="grid h-16 w-16 place-items-center rounded-full bg-accent text-2xl font-black">
-                {user.nickname[0]}
+              <div className="grid h-16 w-16 place-items-center rounded-full bg-white/10">
+                <User size={28} className="text-white/60" />
               </div>
             )}
             {!editingImage && (
@@ -153,11 +154,8 @@ export default function MePage() {
               href={href}
               className="flex items-center gap-4 rounded-lg bg-white/5 px-5 py-4 transition hover:bg-white/10"
             >
-              <Icon size={20} className="shrink-0 text-accent" />
-              <div>
-                <p className="text-sm font-semibold">{label}</p>
-                <p className="text-xs text-white/50">{desc}</p>
-              </div>
+              <Icon size={20} className="shrink-0 text-white" />
+              <p className="text-sm font-semibold">{label}</p>
             </Link>
           ))}
         </div>

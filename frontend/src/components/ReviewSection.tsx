@@ -108,7 +108,7 @@ export default function ReviewSection({ contentId, reviews, onReviewChange }: Pr
                     className="h-7 w-7 rounded-full object-cover shrink-0"
                   />
                 ) : (
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-zinc-700">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/15">
                     <User size={14} className="text-white/50" />
                   </span>
                 )}

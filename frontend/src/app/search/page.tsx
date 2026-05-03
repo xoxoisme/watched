@@ -65,20 +65,22 @@ export default function SearchPage() {
         </div>
 
         {/* Type tabs */}
-        <div className="flex gap-2 mb-8 max-w-2xl mx-auto">
-          {TABS.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setType(tab.value)}
-              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
-                type === tab.value
-                  ? "bg-accent text-white"
-                  : "bg-white/10 text-white/70 hover:bg-white/20"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="flex mb-8 max-w-2xl mx-auto">
+          <div className="inline-flex rounded-lg bg-white/10 p-1">
+            {TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setType(tab.value)}
+                className={`rounded-md px-5 py-1.5 text-sm font-semibold transition ${
+                  type === tab.value
+                    ? "bg-white text-black shadow"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Results */}

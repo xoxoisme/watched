@@ -53,8 +53,8 @@ export default function MyReviewsPage() {
   return (
     <main className="min-h-screen bg-background">
       <Header />
-      <div className="px-4 pt-28 pb-16 md:px-12 max-w-3xl">
-        <h1 className="mb-6 text-2xl font-black">내 리뷰</h1>
+      <div className="mx-auto w-full max-w-2xl pt-28 pb-16 px-4">
+        <h1 className="mb-6 text-2xl font-black text-center">내 리뷰</h1>
 
         {loading ? (
           <div className="flex justify-center py-20">

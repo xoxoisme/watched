@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Bebas_Neue } from "next/font/google";
+import { Jersey_25 } from "next/font/google";
 import "./globals.css";
 
-const bebasNeue = Bebas_Neue({
+const jersey25 = Jersey_25({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-brand",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={bebasNeue.variable}>
+    <html lang="ko" className={jersey25.variable}>
       <body className="min-h-screen bg-background text-white antialiased">
         {children}
       </body>

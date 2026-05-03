@@ -115,7 +115,7 @@ export default function MyWatchPage() {
                     className="flex-1 rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/80 outline-none disabled:opacity-50"
                   >
                     {(Object.keys(WATCH_LABELS) as WatchStatus[]).map((s) => (
-                      <option key={s} value={s} className="bg-zinc-900">
+                      <option key={s} value={s} className="bg-black">
                         {WATCH_LABELS[s]}
                       </option>
                     ))}

@@ -160,7 +160,7 @@ export default function HomePage() {
             </div>
           </section>
         ) : (
-          <div className="h-[85vh] min-h-[560px] bg-zinc-900" />
+          <div className="h-[85vh] min-h-[560px] bg-black" />
         )}
       </div>
 
