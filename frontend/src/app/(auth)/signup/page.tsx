@@ -31,7 +31,7 @@ export default function SignupPage() {
     try {
       const birthDate = `${birthYear}-${birthMonth.padStart(2, "0")}-${birthDay.padStart(2, "0")}`;
       await signup({ email, password, nickname, birthDate });
-      router.push("/login?next=/onboarding");
+      router.push(`/login?next=/onboarding&email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       const e = err as {
         response?: { data?: { message?: string } };
