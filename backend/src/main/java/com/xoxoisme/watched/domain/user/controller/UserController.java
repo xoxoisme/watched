@@ -1,9 +1,9 @@
 package com.xoxoisme.watched.domain.user.controller;
 
-import com.xoxoisme.watched.domain.user.dto.LoginRequest;
-import com.xoxoisme.watched.domain.user.dto.SignupRequest;
-import com.xoxoisme.watched.domain.user.dto.TokenResponse;
+import com.xoxoisme.watched.domain.user.dto.request.LoginRequest;
+import com.xoxoisme.watched.domain.user.dto.request.SignupRequest;
 import com.xoxoisme.watched.domain.user.dto.request.UserUpdateRequest;
+import com.xoxoisme.watched.domain.user.dto.response.TokenResponse;
 import com.xoxoisme.watched.domain.user.dto.response.UserProfileResponse;
 import com.xoxoisme.watched.domain.user.service.UserService;
 import com.xoxoisme.watched.global.common.response.ApiResponse;

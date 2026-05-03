@@ -86,3 +86,41 @@ com.xoxoisme.watched/
 - 임무를 마치고, git에 올리기 전 제가 직접 컨펌을 하고 올리도록 하겠습니다.(토큰을 최소화할 수 있도록 너무 세분화하지 않아도 됩니다. 대충 커밋할 게 6개면 3개정도로 나눠주세요.)
 - Controller는 Apiresponse로 통일합니다.
 - dto 구조는 /dto 내에서 request와 response 폴더로 나누어 정리해주세요. request, response가 아니면 /dto내에 그냥 두셔도 됩니다.
+
+## 진행 현황 (백엔드)
+
+모든 도메인 **완전 구현** 완료.
+
+| 도메인 | 주요 엔드포인트 |
+|--------|----------------|
+| User | POST /api/users/signup, login, logout · GET/PUT /api/users/me |
+| Content | GET /api/contents/trending, /top/movies, /top/tv, /recommendations, /search · GET /api/contents/{id}, /tmdb/{tmdbId} · POST /api/contents |
+| Watch | POST /api/watch · GET /api/watch/me · PUT/DELETE /api/watch/{id} |
+| Review | POST /api/reviews · GET /api/reviews/contents/{contentId}, /me · PUT/DELETE /api/reviews/{id} · POST /api/reviews/{id}/likes |
+| Collection | POST /api/collections · GET /api/collections/me, /public · GET/PUT/DELETE /api/collections/{id} · POST/DELETE /api/collections/{id}/items |
+| Rating | POST /api/ratings · GET /api/ratings/me/contents/{contentId}, /contents/{contentId} · PUT/DELETE /api/ratings/{id} |
+| Favorite | POST /api/favorites · GET /api/favorites/me · DELETE /api/favorites/{id} |
+
+설정 파일: `application.yaml`(공통) + `application-dev.yaml`(H2, dev) + `application-prod.yaml`(MySQL, prod) 로 분리 완료.
+
+## 진행 현황 (프론트)
+
+모든 주요 페이지 구현 완료. 실 API 연결 상태.
+
+| 페이지 | 경로 | 상태 |
+|--------|------|------|
+| 홈 | `/` | 실 API 연결 |
+| 로그인/회원가입 | `/login`, `/signup` | 실 API 연결 |
+| 온보딩 | `/onboarding` | 구현 |
+| 내 프로필 | `/me` | 실 API 연결 |
+| 시청 기록 | `/my/watch` | 실 API 연결 |
+| 내 리뷰 | `/my/reviews` | 실 API 연결 |
+| 즐겨찾기 | `/my/favorites` | 실 API 연결 |
+| 검색 | `/search` | 실 API 연결 |
+| 콘텐츠 상세 (TMDB) | `/contents/[tmdbId]` | 실 API 연결 |
+| 콘텐츠 상세 (DB) | `/contents/c/[id]` | 실 API 연결 |
+| 내 컬렉션 | `/collections/me` | 실 API 연결 |
+| 컬렉션 상세 | `/collections/[id]` | 실 API 연결 |
+| 공개 컬렉션 탐색 | `/collections/explore` | 실 API 연결 |
+
+`/src/lib/` 구조: `api.ts`(Axios + JWT interceptor), `auth.ts`, `content.ts`, `interaction.ts`, `collection.ts`, `types.ts`
