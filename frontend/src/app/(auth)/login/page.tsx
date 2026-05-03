@@ -19,9 +19,15 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (!isValidEmail(email)) {
+      setError("올바른 이메일 형식을 입력해주세요. (예: example@domain.com)");
+      return;
+    }
     setSubmitting(true);
     try {
       const { accessToken } = await login({ email, password });
