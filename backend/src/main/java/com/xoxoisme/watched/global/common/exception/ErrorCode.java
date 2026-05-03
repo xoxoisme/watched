@@ -17,6 +17,9 @@ public enum ErrorCode {
     USER_NOT_FOUND("U001", HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     EMAIL_ALREADY_EXISTS("U002", HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     NICKNAME_ALREADY_EXISTS("U003", HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다."),
+    EMAIL_NOT_VERIFIED("U004", HttpStatus.BAD_REQUEST, "이메일 인증이 완료되지 않았습니다."),
+    EMAIL_VERIFY_CODE_INVALID("U005", HttpStatus.BAD_REQUEST, "인증 코드가 올바르지 않습니다."),
+    EMAIL_VERIFY_CODE_EXPIRED("U006", HttpStatus.BAD_REQUEST, "인증 코드가 만료되었습니다."),
 
     // ========== Content ==========
     CONTENT_NOT_FOUND("CT001", HttpStatus.NOT_FOUND, "존재하지 않는 콘텐츠입니다."),

@@ -23,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailVerificationService emailVerificationService;
 
     public UserProfileResponse getProfile(Long userId) {
         User user = userRepository.findById(userId)
@@ -40,6 +41,9 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequest request) {
+        if (!emailVerificationService.isVerified(request.email())) {
+            throw new BusinessException(ErrorCode.EMAIL_NOT_VERIFIED);
+        }
         if (userRepository.existsByEmail(request.email())) {
             throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
@@ -54,6 +58,7 @@ public class UserService {
                 request.birthDate()
         );
         userRepository.save(user);
+        emailVerificationService.consumeVerified(request.email());
     }
 
     public TokenResponse login(LoginRequest request) {
