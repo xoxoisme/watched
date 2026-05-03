@@ -19,6 +19,14 @@ export async function signup(payload: SignupPayload): Promise<void> {
   await api.post<ApiResponse<void>>("/api/users/signup", payload);
 }
 
+export async function requestEmailVerify(email: string): Promise<void> {
+  await api.post<ApiResponse<void>>("/api/users/email/verify-request", { email });
+}
+
+export async function confirmEmailVerify(email: string, code: string): Promise<void> {
+  await api.post<ApiResponse<void>>("/api/users/email/verify-confirm", { email, code });
+}
+
 export async function logout(): Promise<void> {
   await api.post<ApiResponse<void>>("/api/users/logout");
 }
