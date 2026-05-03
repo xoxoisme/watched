@@ -1,5 +1,5 @@
 import { api } from "./api";
-import type { ApiResponse, Collection, CollectionItem } from "./types";
+import type { ApiResponse, Collection, CollectionItem, PageResponse } from "./types";
 
 export async function createCollection(
   name: string,
@@ -14,8 +14,10 @@ export async function createCollection(
   return data.data;
 }
 
-export async function getMyCollections(): Promise<Collection[]> {
-  const { data } = await api.get<ApiResponse<Collection[]>>("/api/collections/me");
+export async function getMyCollections(page = 0, size = 12): Promise<PageResponse<Collection>> {
+  const { data } = await api.get<ApiResponse<PageResponse<Collection>>>(
+    `/api/collections/me?page=${page}&size=${size}`
+  );
   return data.data;
 }
 
@@ -61,10 +63,12 @@ export async function removeItemFromCollection(
 }
 
 export async function getPublicCollections(
-  period: "today" | "month" | "year" | "all"
-): Promise<Collection[]> {
-  const { data } = await api.get<ApiResponse<Collection[]>>(
-    `/api/collections/public?period=${period}`
+  period: "today" | "month" | "year" | "all",
+  page = 0,
+  size = 12
+): Promise<PageResponse<Collection>> {
+  const { data } = await api.get<ApiResponse<PageResponse<Collection>>>(
+    `/api/collections/public?period=${period}&page=${page}&size=${size}`
   );
   return data.data;
 }

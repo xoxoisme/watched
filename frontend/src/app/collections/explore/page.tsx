@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FolderOpen, KeyRound } from "lucide-react";
+import { ChevronLeft, ChevronRight, FolderOpen, KeyRound } from "lucide-react";
 import Header from "@/components/Header";
 import { getPublicCollections } from "@/lib/collection";
 import { TMDB_IMAGE, type Collection } from "@/lib/types";
@@ -24,14 +24,23 @@ export default function ExploreCollectionsPage() {
   const [period, setPeriod] = useState<Period>("all");
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [period]);
 
   useEffect(() => {
     if (!isAuthed) return;
     setLoading(true);
-    getPublicCollections(period)
-      .then(setCollections)
+    getPublicCollections(period, page, 12)
+      .then((res) => {
+        setCollections(res.content);
+        setTotalPages(res.totalPages);
+      })
       .finally(() => setLoading(false));
-  }, [period, isAuthed]);
+  }, [period, page, isAuthed]);
 
   return (
     <main className="min-h-screen">
@@ -83,43 +92,79 @@ export default function ExploreCollectionsPage() {
                 <p className="text-sm text-white/40">공개 컬렉션이 없습니다</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {collections.map((c) => (
-                  <Link
-                    key={c.id}
-                    href={`/collections/${c.id}`}
-                    className="group rounded-xl border border-white/10 bg-surface hover:border-white/30 transition overflow-hidden"
-                  >
-                    <div className="grid grid-cols-2 gap-0.5 aspect-[4/3] bg-white/5 overflow-hidden">
-                      {c.items.slice(0, 4).map((item) => (
-                        <img
-                          key={item.id}
-                          src={TMDB_IMAGE(item.posterPath, "w500")}
-                          alt={item.contentTitle}
-                          className="w-full h-full object-cover"
-                        />
-                      ))}
-                      {c.items.length === 0 && (
-                        <div className="col-span-2 row-span-2 flex items-center justify-center text-white/20">
-                          <FolderOpen size={32} />
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {collections.map((c) => (
+                    <Link
+                      key={c.id}
+                      href={`/collections/${c.id}`}
+                      className="group rounded-xl border border-white/10 bg-surface hover:border-white/30 transition overflow-hidden"
+                    >
+                      <div className="grid grid-cols-2 gap-0.5 aspect-[4/3] bg-white/5 overflow-hidden">
+                        {c.items.slice(0, 4).map((item) => (
+                          <img
+                            key={item.id}
+                            src={TMDB_IMAGE(item.posterPath, "w500")}
+                            alt={item.contentTitle}
+                            className="w-full h-full object-cover"
+                          />
+                        ))}
+                        {c.items.length === 0 && (
+                          <div className="col-span-2 row-span-2 flex items-center justify-center text-white/20">
+                            <FolderOpen size={32} />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-3">
+                        <div className="flex items-start justify-between gap-2 mb-0.5">
+                          <p className="font-semibold text-sm truncate group-hover:text-accent transition">{c.name}</p>
+                          <p className="text-xs text-white/50 shrink-0">{c.ownerNickname}</p>
                         </div>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <div className="flex items-start justify-between gap-2 mb-0.5">
-                        <p className="font-semibold text-sm truncate group-hover:text-accent transition">{c.name}</p>
-                        <p className="text-xs text-white/50 shrink-0">{c.ownerNickname}</p>
+                        {c.description && (
+                          <p className="text-xs text-white/40 mt-1 line-clamp-2">{c.description}</p>
+                        )}
+                        <div className="mt-2 text-xs text-white/40">
+                          조회 수 {c.viewCount.toLocaleString()}
+                        </div>
                       </div>
-                      {c.description && (
-                        <p className="text-xs text-white/40 mt-1 line-clamp-2">{c.description}</p>
-                      )}
-                      <div className="mt-2 text-xs text-white/40">
-                        조회 수 {c.viewCount.toLocaleString()}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-1">
+                    <button
+                      onClick={() => setPage((p) => Math.max(0, p - 1))}
+                      disabled={page === 0}
+                      className="flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                      aria-label="이전 페이지"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i).map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => setPage(p)}
+                        className={`h-8 min-w-[2rem] rounded-md px-2 text-sm font-medium transition ${
+                          page === p
+                            ? "bg-white text-black"
+                            : "text-white/60 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        {p + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                      disabled={page >= totalPages - 1}
+                      className="flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                      aria-label="다음 페이지"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}

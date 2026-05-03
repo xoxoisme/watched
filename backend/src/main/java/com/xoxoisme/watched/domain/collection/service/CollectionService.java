@@ -17,6 +17,7 @@ import com.xoxoisme.watched.domain.user.entity.User;
 import com.xoxoisme.watched.domain.user.repository.UserRepository;
 import com.xoxoisme.watched.global.common.exception.BusinessException;
 import com.xoxoisme.watched.global.common.exception.ErrorCode;
+import com.xoxoisme.watched.global.common.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +47,8 @@ public class CollectionService {
         );
     }
 
-    public List<CollectionResponse> getMyCollections(Long userId) {
-        return collectionRepository.findByUserId(userId).stream()
+    public PageResponse<CollectionResponse> getMyCollections(Long userId, int page, int size) {
+        List<CollectionResponse> all = collectionRepository.findByUserId(userId).stream()
                 .map(collection -> {
                     List<CollectionItemResponse> items = collectionItemRepository
                             .findByCollectionId(collection.getId()).stream()
@@ -58,6 +59,7 @@ public class CollectionService {
                     return CollectionResponse.from(collection, items, viewCount);
                 })
                 .toList();
+        return PageResponse.of(all, page, size);
     }
 
     @Transactional
@@ -83,7 +85,7 @@ public class CollectionService {
         return CollectionResponse.from(collection, items, viewCount);
     }
 
-    public List<CollectionResponse> getPublicCollections(String period) {
+    public PageResponse<CollectionResponse> getPublicCollections(String period, int page, int size) {
         LocalDateTime from = switch (period) {
             case "today" -> LocalDate.now().atStartOfDay();
             case "month" -> LocalDate.now().withDayOfMonth(1).atStartOfDay();
@@ -91,7 +93,7 @@ public class CollectionService {
             default -> LocalDateTime.of(2000, 1, 1, 0, 0);
         };
 
-        return collectionRepository.findByIsPublicTrue().stream()
+        List<CollectionResponse> all = collectionRepository.findByIsPublicTrue().stream()
                 .map(c -> {
                     long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(c.getId(), from);
                     List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(c.getId()).stream()
@@ -101,6 +103,7 @@ public class CollectionService {
                 })
                 .sorted(Comparator.comparingLong(CollectionResponse::viewCount).reversed())
                 .toList();
+        return PageResponse.of(all, page, size);
     }
 
     @Transactional

@@ -7,13 +7,12 @@ import com.xoxoisme.watched.domain.collection.dto.response.CollectionItemRespons
 import com.xoxoisme.watched.domain.collection.dto.response.CollectionResponse;
 import com.xoxoisme.watched.domain.collection.service.CollectionService;
 import com.xoxoisme.watched.global.common.response.ApiResponse;
+import com.xoxoisme.watched.global.common.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/collections")
@@ -30,15 +29,20 @@ public class CollectionController {
     }
 
     @GetMapping("/me")
-    public ApiResponse<List<CollectionResponse>> getMyCollections(Authentication authentication) {
+    public ApiResponse<PageResponse<CollectionResponse>> getMyCollections(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
-        return ApiResponse.ok(collectionService.getMyCollections(userId));
+        return ApiResponse.ok(collectionService.getMyCollections(userId, page, size));
     }
 
     @GetMapping("/public")
-    public ApiResponse<List<CollectionResponse>> getPublicCollections(
-            @RequestParam(defaultValue = "all") String period) {
-        return ApiResponse.ok(collectionService.getPublicCollections(period));
+    public ApiResponse<PageResponse<CollectionResponse>> getPublicCollections(
+            @RequestParam(defaultValue = "all") String period,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        return ApiResponse.ok(collectionService.getPublicCollections(period, page, size));
     }
 
     @GetMapping("/{id}")

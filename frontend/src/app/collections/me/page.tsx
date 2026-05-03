@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Globe, Lock, Loader2, Plus, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Globe, Lock, Loader2, Plus, Search, X } from "lucide-react";
 import Header from "@/components/Header";
 import { getMyCollections, createCollection, addItemToCollection } from "@/lib/collection";
 import { searchContent, fetchContentByTmdbId } from "@/lib/content";
@@ -15,6 +15,8 @@ export default function MyCollectionsPage() {
   const accessToken = useAuthStore((s) => s.accessToken);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // 생성 폼
   const [showForm, setShowForm] = useState(false);
@@ -33,8 +35,14 @@ export default function MyCollectionsPage() {
 
   useEffect(() => {
     if (!accessToken) { router.push("/login"); return; }
-    getMyCollections().then(setCollections).finally(() => setLoading(false));
-  }, [accessToken, router]);
+    setLoading(true);
+    getMyCollections(page, 12)
+      .then((res) => {
+        setCollections(res.content);
+        setTotalPages(res.totalPages);
+      })
+      .finally(() => setLoading(false));
+  }, [accessToken, router, page]);
 
   useEffect(() => {
     if (!searchQuery.trim()) { setSearchResults([]); return; }
@@ -79,12 +87,18 @@ export default function MyCollectionsPage() {
         await addItemToCollection(created.id, content.id);
       }
 
-      // 아이템이 있으면 상세 페이지로, 없으면 목록 갱신
+      // 아이템이 있으면 상세 페이지로, 없으면 첫 페이지부터 다시 로드
       if (selected.length > 0) {
         router.push(`/collections/${created.id}`);
       } else {
-        setCollections((prev) => [created, ...prev]);
         closeForm();
+        if (page === 0) {
+          const res = await getMyCollections(0, 12);
+          setCollections(res.content);
+          setTotalPages(res.totalPages);
+        } else {
+          setPage(0);
+        }
       }
     } finally {
       setSubmitting(false);
@@ -244,7 +258,8 @@ export default function MyCollectionsPage() {
             아직 컬렉션이 없습니다. 새 컬렉션을 만들어보세요!
           </p>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {collections.map((c) => (
               <Link
                 key={c.id}
@@ -284,7 +299,42 @@ export default function MyCollectionsPage() {
                 </div>
               </Link>
             ))}
-          </div>
+            </div>
+
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-1">
+                <button
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                  aria-label="이전 페이지"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i).map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPage(p)}
+                    className={`h-8 min-w-[2rem] rounded-md px-2 text-sm font-medium transition ${
+                      page === p
+                        ? "bg-white text-black"
+                        : "text-white/60 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    {p + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  disabled={page >= totalPages - 1}
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                  aria-label="다음 페이지"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
