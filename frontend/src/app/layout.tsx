@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Jersey_25 } from "next/font/google";
 import "./globals.css";
+import ChatBot from "@/components/ChatBot";
 
 const jersey25 = Jersey_25({
   weight: "400",
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={jersey25.variable}>
       <body className="min-h-screen bg-background text-white antialiased">
         {children}
+        <ChatBot />
       </body>
     </html>
   );
