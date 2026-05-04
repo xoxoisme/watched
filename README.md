@@ -5,6 +5,9 @@
 ---
 
 <img src="/assets/스크린샷 2026-05-03.png">
+<img src="/assets/스크린샷 컬렉션.png">
+
+---
 
 ## 주요 기능
 
