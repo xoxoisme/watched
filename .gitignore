@@ -76,3 +76,8 @@ backend/src/test/resources/application.yaml
 # =========================
 /test-output/
 /reports/
+
+# =========================
+# Troubleshooting notes
+# =========================
+trouble shooting/
