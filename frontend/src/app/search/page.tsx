@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Search, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import { searchContent } from "@/lib/content";
@@ -13,12 +14,40 @@ const TABS: { label: string; value: ContentType }[] = [
 ];
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("");
-  const [type, setType] = useState<ContentType>("MOVIE");
+  return (
+    <Suspense>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
+function SearchContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
+  const [type, setType] = useState<ContentType>(() => (searchParams.get("type") as ContentType) ?? "MOVIE");
   const [results, setResults] = useState<TmdbContent[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const updateUrl = (q: string, t: ContentType) => {
+    const params = new URLSearchParams();
+    if (q.trim()) params.set("q", q.trim());
+    params.set("type", t);
+    router.replace(`/search?${params.toString()}`, { scroll: false });
+  };
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    updateUrl(value, type);
+  };
+
+  const handleTypeChange = (value: ContentType) => {
+    setType(value);
+    updateUrl(query, value);
+  };
 
   useEffect(() => {
     if (!query.trim()) {
@@ -55,7 +84,7 @@ export default function SearchPage() {
             type="text"
             placeholder="제목을 입력하세요..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             autoFocus
             className="w-full rounded-lg bg-white/10 pl-12 pr-4 py-4 text-lg outline-none ring-1 ring-transparent transition placeholder:text-white/40 focus:bg-white/15 focus:ring-white/30"
           />
@@ -70,7 +99,7 @@ export default function SearchPage() {
             {TABS.map((tab) => (
               <button
                 key={tab.value}
-                onClick={() => setType(tab.value)}
+                onClick={() => handleTypeChange(tab.value)}
                 className={`rounded-md px-5 py-1.5 text-sm font-semibold transition ${
                   type === tab.value
                     ? "bg-white text-black shadow"

@@ -112,12 +112,12 @@ export default function PosterCard({ content }: { content: PosterItem }) {
           <button
             onClick={handleFavorite}
             disabled={loading}
-            className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover/card:pointer-events-auto group-hover/card:opacity-100 hover:bg-black/60 disabled:opacity-50"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover/card:pointer-events-auto group-hover/card:opacity-100 hover:bg-black/35 disabled:opacity-50"
           >
             <Heart
               size={22}
               fill={favorited ? "currentColor" : "none"}
-              className={favorited ? "text-red-400" : "text-white"}
+              className={favorited ? "text-red-400" : "text-white/70"}
             />
           </button>
         )}

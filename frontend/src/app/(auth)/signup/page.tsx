@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { CheckCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import { signup, requestEmailVerify, confirmEmailVerify } from "@/lib/auth";
 
 export default function SignupPage() {
@@ -18,6 +18,9 @@ export default function SignupPage() {
   const [confirmingCode, setConfirmingCode] = useState(false);
 
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [nickname, setNickname] = useState("");
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
@@ -83,6 +86,10 @@ export default function SignupPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (password !== passwordConfirm) {
+      setError("비밀번호가 일치하지 않습니다.");
+      return;
+    }
     setSubmitting(true);
     try {
       const birthDate = `${birthYear}-${birthMonth.padStart(2, "0")}-${birthDay.padStart(2, "0")}`;
@@ -177,17 +184,51 @@ export default function SignupPage() {
         {/* 나머지 필드 — 이메일 인증 완료 후 표시 */}
         {emailVerified && (
           <>
-            <input
-              type="password"
-              placeholder="비밀번호 (8~20자)"
-              autoComplete="new-password"
-              required
-              minLength={8}
-              maxLength={20}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded bg-white/10 px-4 py-3.5 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="비밀번호 (8~20자)"
+                autoComplete="new-password"
+                required
+                minLength={8}
+                maxLength={20}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded bg-white/10 px-4 py-3.5 pr-11 text-sm outline-none ring-1 ring-transparent transition placeholder:text-white/50 focus:bg-white/15 focus:ring-white/40"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type={showPasswordConfirm ? "text" : "password"}
+                placeholder="비밀번호 확인"
+                autoComplete="new-password"
+                required
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                className={`w-full rounded bg-white/10 px-4 py-3.5 pr-11 text-sm outline-none ring-1 transition placeholder:text-white/50 focus:bg-white/15 ${
+                  passwordConfirm && password !== passwordConfirm
+                    ? "ring-red-500/60"
+                    : "ring-transparent focus:ring-white/40"
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPasswordConfirm((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
+              >
+                {showPasswordConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+              {passwordConfirm && password !== passwordConfirm && (
+                <p className="mt-1 text-xs text-red-400">비밀번호가 일치하지 않습니다.</p>
+              )}
+            </div>
             <input
               type="text"
               placeholder="닉네임 (최대 20자)"

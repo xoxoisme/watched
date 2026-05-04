@@ -87,7 +87,7 @@ export default function ReviewSection({ contentId, reviews, onReviewChange }: Pr
             <button
               onClick={handleCreate}
               disabled={!text.trim() || submitting}
-              className="flex items-center gap-1.5 rounded bg-accent px-4 py-1.5 text-sm font-semibold disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded bg-zinc-700 px-4 py-1.5 text-sm font-semibold transition hover:bg-zinc-600 disabled:opacity-50"
             >
               {submitting && <Loader2 size={13} className="animate-spin" />}
               리뷰 작성
