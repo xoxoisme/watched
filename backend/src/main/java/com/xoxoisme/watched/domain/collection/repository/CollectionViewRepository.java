@@ -10,4 +10,6 @@ public interface CollectionViewRepository extends JpaRepository<CollectionView, 
 
     boolean existsByCollectionIdAndViewerUserIdAndCreatedAtAfter(
             Long collectionId, Long viewerUserId, LocalDateTime from);
+
+    void deleteByCollectionId(Long collectionId);
 }

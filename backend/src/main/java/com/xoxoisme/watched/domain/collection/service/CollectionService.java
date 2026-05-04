@@ -74,7 +74,7 @@ public class CollectionService {
             boolean recentlyViewed = collectionViewRepository
                     .existsByCollectionIdAndViewerUserIdAndCreatedAtAfter(collectionId, userId, oneHourAgo);
             if (!recentlyViewed) {
-                collectionViewRepository.save(CollectionView.create(collectionId, userId));
+                collectionViewRepository.save(CollectionView.create(collection, userId));
             }
         }
         List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(collectionId).stream()
@@ -90,12 +90,17 @@ public class CollectionService {
             case "today" -> LocalDate.now().atStartOfDay();
             case "month" -> LocalDate.now().withDayOfMonth(1).atStartOfDay();
             case "year" -> LocalDate.now().withDayOfYear(1).atStartOfDay();
-            default -> LocalDateTime.of(2000, 1, 1, 0, 0);
+            default -> null;
         };
 
-        List<CollectionResponse> all = collectionRepository.findByIsPublicTrue().stream()
+        List<Collection> collections = from == null
+                ? collectionRepository.findByIsPublicTrue()
+                : collectionRepository.findByIsPublicTrueAndCreatedAtAfter(from);
+
+        LocalDateTime allTimeFrom = LocalDateTime.of(2000, 1, 1, 0, 0);
+        List<CollectionResponse> all = collections.stream()
                 .map(c -> {
-                    long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(c.getId(), from);
+                    long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(c.getId(), allTimeFrom);
                     List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(c.getId()).stream()
                             .map(CollectionItemResponse::from)
                             .toList();
@@ -116,6 +121,7 @@ public class CollectionService {
     @Transactional
     public void delete(Long userId, Long collectionId) {
         Collection collection = getOwnedCollection(collectionId, userId);
+        collectionViewRepository.deleteByCollectionId(collectionId);
         collectionItemRepository.deleteByCollectionId(collectionId);
         collectionRepository.delete(collection);
     }

@@ -1,9 +1,7 @@
 package com.xoxoisme.watched.domain.collection.entity;
 
 import com.xoxoisme.watched.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CollectionView extends BaseTimeEntity {
 
-    @Column(nullable = false, name = "collection_id")
-    private Long collectionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "collection_id")
+    private Collection collection;
 
     @Column(name = "viewer_user_id")
     private Long viewerUserId;
 
-    public static CollectionView create(Long collectionId, Long viewerUserId) {
+    public static CollectionView create(Collection collection, Long viewerUserId) {
         CollectionView view = new CollectionView();
-        view.collectionId = collectionId;
+        view.collection = collection;
         view.viewerUserId = viewerUserId;
         return view;
     }
