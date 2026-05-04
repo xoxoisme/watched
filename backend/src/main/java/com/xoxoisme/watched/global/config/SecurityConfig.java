@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 "/api/collections/{id}"
                         ).permitAll()
                         .requestMatchers(
+                                "/api/chat",
                                 "/api/users/signup",
                                 "/api/users/login",
                                 "/api/users/email/verify-request",
