@@ -43,6 +43,7 @@ public class SecurityConfig {
                                 "/api/collections/public",
                                 "/api/collections/{id}"
                         ).permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/prometheus").permitAll()
                         .requestMatchers(
                                 "/api/chat",
                                 "/api/users/signup",
