@@ -4,7 +4,7 @@
 
 ---
 
-<img src="/assets/스크린샷 2026-05-03.png">
+<img src="/assets/localhost_3000_ (2).png">
 <img src="/assets/스크린샷 컬렉션.png">
 
 ---
@@ -16,6 +16,9 @@
 - **컬렉션** — 콘텐츠를 모아 공개/비공개 컬렉션 생성, 조회수 기반 탐색
 - **즐겨찾기** — 관심 콘텐츠 즐겨찾기 저장
 - **TMDB 연동** — 트렌딩·인기 영화/시리즈 자동 수집, 한글 제목 검색
+- **AI 챗봇** — 줄거리·장면 설명만으로 영화/시리즈 제목을 찾아주는 Claude API 기반 플로팅 챗봇
+- **이메일 인증** — 회원가입 시 SMTP 기반 인증 코드 발송
+- **모니터링** — Spring Boot Actuator + Prometheus + Grafana 대시보드로 API 응답시간/JVM 메트릭 실시간 관측
 
 ---
 
@@ -26,14 +29,17 @@
 | Backend | Java 21, Spring Boot 3.5.13, Spring Data JPA, Spring Security |
 | Build | Gradle (Kotlin DSL) |
 | Auth | JWT (jjwt 0.12.6) |
-| Database | MySQL 8.0 (prod), H2 (dev) |
+| Database | MySQL 8.0 (prod), H2 (dev), Redis (캐싱 예정) |
+| Mail | Spring Boot Starter Mail (SMTP) |
 | Test | JUnit 5, Spring Security Test |
 | API Docs | SpringDoc OpenAPI 2.8.16 (Swagger UI) |
+| Monitoring | Spring Boot Actuator, Micrometer, Prometheus, Grafana |
+| Load Test | Apache JMeter |
 | Frontend | Next.js 14.2 (App Router), React 18, TypeScript 5 |
 | UI | Tailwind CSS 3.4, lucide-react, embla-carousel |
 | State | Zustand 5 |
 | HTTP | Axios (JWT interceptor) |
-| External | TMDB API |
+| External | TMDB API, Anthropic Claude API |
 
 ---
 
@@ -44,13 +50,14 @@ watched/
 ├── backend/          # Spring Boot API 서버
 │   └── src/main/
 │       ├── java/com/xoxoisme/watched/
-│       │   ├── global/   # SecurityConfig, 전역 예외, ApiResponse, PageResponse
+│       │   ├── global/   # SecurityConfig, 전역 예외, ApiResponse, PageResponse, AnthropicProperties
 │       │   └── domain/
-│       │       ├── user/        # 회원가입, 로그인, 프로필
+│       │       ├── user/        # 회원가입, 로그인, 프로필, 이메일 인증
 │       │       ├── content/     # 콘텐츠 (TMDB 연동)
 │       │       ├── watch/       # 시청 기록
 │       │       ├── review/      # 리뷰 & 좋아요
-│       │       ├── collection/  # 컬렉션 & 아이템 & 조회수
+│       │       ├── collection/  # 컬렉션 & 아이템 & 조회수 (viewCount 비정규화)
+│       │       ├── chat/        # AI 챗봇 (Claude API)
 │       │       └── interacton/  # rating(평점), favorite(즐겨찾기)
 │       └── resources/
 │           ├── application.yaml       # 공통 설정
@@ -89,8 +96,24 @@ cd backend
 |------|-----|
 | Swagger UI | http://localhost:8080/swagger-ui.html |
 | H2 콘솔 | http://localhost:8080/h2-console |
+| Actuator Health | http://localhost:8080/actuator/health |
+| Prometheus 메트릭 | http://localhost:8080/actuator/prometheus |
 
 > H2 콘솔: JDBC URL `jdbc:h2:mem:testdb` / user `sa` / 비밀번호 없음
+
+### 모니터링 (Prometheus + Grafana)
+
+```bash
+# 프로젝트 루트에서
+docker-compose -f docker-compose.monitoring.yml up -d
+```
+
+| 도구 | URL | 계정 |
+|------|-----|------|
+| Prometheus | http://localhost:9090 | - |
+| Grafana | http://localhost:3001 | admin / admin |
+
+Grafana에서 Data source(`http://prometheus:9090`)를 추가한 뒤 대시보드 ID `12900`(JVM Micrometer)을 import하면 응답시간·JVM 메트릭을 바로 확인할 수 있습니다.
 
 ### Frontend
 
@@ -110,6 +133,8 @@ npm run lint
 |----|------|
 | `TMDB_API_TOKEN` | TMDB API v4 Bearer 토큰 |
 | `JWT_SECRET` | JWT 서명 비밀키 (HS256, 최소 32바이트) |
+| `ANTHROPIC_API_KEY` | Claude API 키 (챗봇용) |
+| `MAIL_USERNAME` / `MAIL_PASSWORD` | SMTP 계정 (이메일 인증) |
 | `MYSQL_*` (prod) | DB 호스트 / 사용자 / 비밀번호 |
 
 ---
@@ -153,6 +178,7 @@ npm run lint
 | Collection | `POST /api/collections` · `GET /api/collections/me` · `/public?period=today\|month\|year\|all` · `GET/PUT/DELETE /api/collections/{id}` · `POST/DELETE /api/collections/{id}/items` |
 | Rating | `POST /api/ratings` · `GET /api/ratings/me/contents/{contentId}` · `/contents/{contentId}` · `PUT/DELETE /api/ratings/{id}` |
 | Favorite | `POST /api/favorites` · `GET /api/favorites/me` · `DELETE /api/favorites/{id}` |
+| Chat | `POST /api/chat` (Claude API 기반 영화/시리즈 제목 찾기) |
 
 ---
 
@@ -173,6 +199,27 @@ npm run lint
 | 내 컬렉션 | `/collections/me` |
 | 컬렉션 상세 | `/collections/[id]` |
 | 공개 컬렉션 탐색 | `/collections/explore` |
+
+---
+
+## 성능 개선 사례
+
+### 공개 컬렉션 조회 — 메모리 Slice → DB Pageable + 비정규화
+
+**문제**: `getPublicCollections`가 전체 데이터를 fetch한 뒤 Java 메모리에서 slice하는 구조라 데이터가 늘수록 쿼리 수가 선형으로 증가 (`2N + 1`).
+
+**1차 개선 (Pageable 전환)**: Spring Data JPA `Pageable`로 DB 레벨 LIMIT/OFFSET 적용. 그러나 조회수 정렬이 상관 서브쿼리(`ORDER BY (SELECT COUNT...)`)로 구현되어 row마다 서브쿼리가 실행되어 Max 응답시간이 오히려 증가.
+
+**2차 개선 (비정규화)**: `Collection` 엔티티에 `viewCount` 컬럼 추가 → 단순 `ORDER BY view_count DESC`로 인덱스 활용. `CollectionView` 테이블은 1시간 내 중복 조회 방지 용도로만 유지.
+
+**JMeter 부하 테스트 결과 (500 threads × 5 loops)**
+
+| 방식 | Avg | Min | Max |
+|------|-----|-----|-----|
+| 메모리 Slice | 10ms | 6ms | 67ms |
+| Pageable + viewCount 컬럼 | **4ms** | **1ms** | 45ms |
+
+상세 트러블슈팅은 [`trouble shooting/Slice → Pageable 전환.md`](./trouble%20shooting/Slice%20→%20Pageable%20전환.md) 참고.
 
 ---
 
