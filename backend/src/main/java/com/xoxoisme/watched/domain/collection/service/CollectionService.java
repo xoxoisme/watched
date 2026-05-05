@@ -22,9 +22,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -48,18 +50,14 @@ public class CollectionService {
     }
 
     public PageResponse<CollectionResponse> getMyCollections(Long userId, int page, int size) {
-        List<CollectionResponse> all = collectionRepository.findByUserId(userId).stream()
-                .map(collection -> {
-                    List<CollectionItemResponse> items = collectionItemRepository
-                            .findByCollectionId(collection.getId()).stream()
-                            .map(CollectionItemResponse::from)
-                            .toList();
-                    long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(
-                            collection.getId(), LocalDateTime.of(2000, 1, 1, 0, 0));
-                    return CollectionResponse.from(collection, items, viewCount);
-                })
-                .toList();
-        return PageResponse.of(all, page, size);
+        Page<Collection> collectionPage = collectionRepository.findByUserId(userId, PageRequest.of(page, size));
+        return PageResponse.from(collectionPage.map(collection -> {
+            List<CollectionItemResponse> items = collectionItemRepository
+                    .findByCollectionId(collection.getId()).stream()
+                    .map(CollectionItemResponse::from)
+                    .toList();
+            return CollectionResponse.from(collection, items, collection.getViewCount());
+        }));
     }
 
     @Transactional
@@ -75,14 +73,13 @@ public class CollectionService {
                     .existsByCollectionIdAndViewerUserIdAndCreatedAtAfter(collectionId, userId, oneHourAgo);
             if (!recentlyViewed) {
                 collectionViewRepository.save(CollectionView.create(collection, userId));
+                collection.incrementViewCount();
             }
         }
         List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(collectionId).stream()
                 .map(CollectionItemResponse::from)
                 .toList();
-        long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(
-                collectionId, LocalDateTime.of(2000, 1, 1, 0, 0));
-        return CollectionResponse.from(collection, items, viewCount);
+        return CollectionResponse.from(collection, items, collection.getViewCount());
     }
 
     public PageResponse<CollectionResponse> getPublicCollections(String period, int page, int size) {
@@ -93,22 +90,17 @@ public class CollectionService {
             default -> null;
         };
 
-        List<Collection> collections = from == null
-                ? collectionRepository.findByIsPublicTrue()
-                : collectionRepository.findByIsPublicTrueAndCreatedAtAfter(from);
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<Collection> collectionPage = from == null
+                ? collectionRepository.findByIsPublicTrueOrderByViewCountDesc(pageable)
+                : collectionRepository.findByIsPublicTrueAndCreatedAtAfterOrderByViewCountDesc(from, pageable);
 
-        LocalDateTime allTimeFrom = LocalDateTime.of(2000, 1, 1, 0, 0);
-        List<CollectionResponse> all = collections.stream()
-                .map(c -> {
-                    long viewCount = collectionViewRepository.countByCollectionIdAndCreatedAtAfter(c.getId(), allTimeFrom);
-                    List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(c.getId()).stream()
-                            .map(CollectionItemResponse::from)
-                            .toList();
-                    return CollectionResponse.from(c, items, viewCount);
-                })
-                .sorted(Comparator.comparingLong(CollectionResponse::viewCount).reversed())
-                .toList();
-        return PageResponse.of(all, page, size);
+        return PageResponse.from(collectionPage.map(c -> {
+            List<CollectionItemResponse> items = collectionItemRepository.findByCollectionId(c.getId()).stream()
+                    .map(CollectionItemResponse::from)
+                    .toList();
+            return CollectionResponse.from(c, items, c.getViewCount());
+        }));
     }
 
     @Transactional

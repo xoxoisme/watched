@@ -26,6 +26,9 @@ public class Collection extends BaseTimeEntity {
     @Column(nullable = false, name = "is_public")
     private boolean isPublic;
 
+    @Column(nullable = false, name = "view_count", columnDefinition = "bigint default 0")
+    private long viewCount = 0;
+
     public static Collection create(User user, String name, String description, boolean isPublic) {
         Collection collection = new Collection();
         collection.user = user;
@@ -39,5 +42,9 @@ public class Collection extends BaseTimeEntity {
         this.name = name;
         this.description = description;
         this.isPublic = isPublic;
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
     }
 }

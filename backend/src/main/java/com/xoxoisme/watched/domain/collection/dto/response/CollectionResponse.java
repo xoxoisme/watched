@@ -28,10 +28,10 @@ public record CollectionResponse(
     }
 
     public static CollectionResponse from(Collection collection, List<CollectionItemResponse> items) {
-        return from(collection, items, 0L);
+        return from(collection, items, collection.getViewCount());
     }
 
     public static CollectionResponse from(Collection collection) {
-        return from(collection, List.of(), 0L);
+        return from(collection, List.of(), collection.getViewCount());
     }
 }

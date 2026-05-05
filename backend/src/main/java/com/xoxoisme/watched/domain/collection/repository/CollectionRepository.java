@@ -1,13 +1,14 @@
 package com.xoxoisme.watched.domain.collection.repository;
 
 import com.xoxoisme.watched.domain.collection.entity.Collection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface CollectionRepository extends JpaRepository<Collection, Long> {
-    List<Collection> findByUserId(Long userId);
-    List<Collection> findByIsPublicTrue();
-    List<Collection> findByIsPublicTrueAndCreatedAtAfter(LocalDateTime from);
+    Page<Collection> findByUserId(Long userId, Pageable pageable);
+    Page<Collection> findByIsPublicTrueOrderByViewCountDesc(Pageable pageable);
+    Page<Collection> findByIsPublicTrueAndCreatedAtAfterOrderByViewCountDesc(LocalDateTime from, Pageable pageable);
 }
