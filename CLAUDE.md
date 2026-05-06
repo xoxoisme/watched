@@ -12,15 +12,28 @@
 ## 명령어
 
 ```bash
-./gradlew bootRun       # 애플리케이션 실행
-./gradlew build         # 빌드 (컴파일 + 테스트)
-./gradlew test          # 전체 테스트 실행
-./gradlew test --tests "com.xoxoisme.watched.SomeTest"  # 단일 테스트 실행
-./gradlew clean build   # 클린 후 재빌드
+# 백엔드
+./gradlew bootRun --args='--spring.profiles.active=dev'   # 개발 환경 실행 (H2)
+./gradlew build                                            # 빌드 (컴파일 + 테스트)
+./gradlew test                                             # 전체 테스트 실행
+./gradlew test --tests "com.xoxoisme.watched.SomeTest"    # 단일 테스트 실행
+./gradlew clean build                                      # 클린 후 재빌드
+
+# 모니터링 스택 (프로젝트 루트에서)
+docker-compose -f docker-compose.monitoring.yml up -d     # Prometheus + Grafana 실행
+docker-compose -f docker-compose.monitoring.yml down      # 종료
+
+# 프론트엔드
+cd frontend && npm run dev                                 # http://localhost:3000
 ```
 
-H2 콘솔: `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:testdb`, user: `sa`, 비밀번호 없음)
-Swagger UI: `http://localhost:8080/swagger-ui.html`
+| 도구 | URL |
+|------|-----|
+| H2 콘솔 | http://localhost:8080/h2-console (JDBC: `jdbc:h2:mem:testdb`, user: `sa`) |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| Actuator Health | http://localhost:8080/actuator/health |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3001 (admin/admin) |
 
 ## 아키텍처
 
@@ -30,11 +43,13 @@ OTT 스트리밍 콘텐츠의 시청 기록, 평점, 리뷰, 컬렉션을 활용
 
 Language	Java 21
 Framework	Spring Boot 3.5.13, Spring Data JPA
-Security	Spring Security, JWT, OAuth2 (Kakao, Naver, Google)
-Database	MySQL 8.0, H2 (dev)
-Test	JUnit 5, TestContainers
-Docs	SpringDoc OpenAPI (Swagger)
-Api     TMDB api
+Security	Spring Security, JWT
+Database	MySQL 8.0, H2 (dev), Redis (캐싱 예정)
+Mail		Spring Boot Starter Mail (SMTP)
+Monitoring	Spring Boot Actuator, Micrometer, Prometheus, Grafana
+Test		JUnit 5, TestContainers
+Docs		SpringDoc OpenAPI (Swagger)
+External	TMDB API, Anthropic Claude API
 
 **패키지 구조** — 도메인 주도 설계, 도메인별 패키지:
 
@@ -42,21 +57,24 @@ Api     TMDB api
 com.xoxoisme.watched/
 ├── global/
 │   ├── config/SecurityConfig.java
-│   └── common/entity/
-│       ├── BaseEntity.java        (id: Long, IDENTITY 전략)
-│       └── BaseTimeEntity.java    (id + createdAt + updatedAt)
+│   ├── jwt/           (JwtTokenProvider, JwtAuthenticationFilter)
+│   └── common/
+│       ├── entity/    (BaseEntity, BaseTimeEntity)
+│       ├── response/  (ApiResponse, PageResponse)
+│       └── exception/ (GlobalExceptionHandler, BusinessException, ErrorCode)
 └── domain/
-    ├── user/          (User 엔티티: email, password, nickname, birthDate, profileImageUrl)
-    ├── content/       (Content 엔티티: title, poster, releaseDate, type, voteAverage — TMDB 데이터)
-    ├── watch/         (Watch 엔티티: user+content+status+watchedAt)
-    ├── review/        (Review 엔티티: user+content+reviewContent, user+content 유니크)
-    ├── collection/    (Collection + CollectionItem 엔티티)
+    ├── user/          (User: email, password, nickname, birthDate, profileImageUrl + 이메일 인증)
+    ├── content/       (Content: title, poster, releaseDate, type, voteAverage — TMDB 데이터)
+    ├── watch/         (Watch: user+content+status+watchedAt)
+    ├── review/        (Review: user+content+reviewContent, user+content 유니크 + 좋아요)
+    ├── collection/    (Collection: viewCount 비정규화 컬럼 포함 + CollectionItem + CollectionView)
+    ├── chat/          (Claude API 기반 영화/시리즈 제목 찾기 챗봇)
     └── interacton/    (오타 — 기존 패키지명 유지를 위해 그대로 둠)
-        ├── rating/    (Rating 엔티티: user+content+score, user+content 유니크)
-        └── favorite/  (Favorite 엔티티: user+content, user+content 유니크)
+        ├── rating/    (Rating: user+content+score, user+content 유니크)
+        └── favorite/  (Favorite: user+content, user+content 유니크)
 ```
 
-각 도메인 패키지는 `entity/`, `controller/`, `service/`, `repository/`, `dto/` 하위 패키지를 가집니다. 현재는 엔티티만 구현되어 있고, controller/service/repository는 스텁 상태입니다.
+각 도메인 패키지는 `entity/`, `controller/`, `service/`, `repository/`, `dto/(request|response)` 하위 구조를 따릅니다.
 
 ## 도메인 컨텍스트
 - User : 사용자 프로필 관리와 인증에 초점을 둡니다.
@@ -93,15 +111,20 @@ com.xoxoisme.watched/
 
 | 도메인 | 주요 엔드포인트 |
 |--------|----------------|
-| User | POST /api/users/signup, login, logout · GET/PUT /api/users/me |
+| User | POST /api/users/signup, login, logout · GET/PUT /api/users/me · POST /api/users/email/verify-request, verify-confirm |
 | Content | GET /api/contents/trending, /top/movies, /top/tv, /recommendations, /search · GET /api/contents/{id}, /tmdb/{tmdbId} · POST /api/contents |
 | Watch | POST /api/watch · GET /api/watch/me · PUT/DELETE /api/watch/{id} |
 | Review | POST /api/reviews · GET /api/reviews/contents/{contentId}, /me · PUT/DELETE /api/reviews/{id} · POST /api/reviews/{id}/likes |
-| Collection | POST /api/collections · GET /api/collections/me, /public · GET/PUT/DELETE /api/collections/{id} · POST/DELETE /api/collections/{id}/items |
+| Collection | POST /api/collections · GET /api/collections/me, /public?period=today\|month\|year\|all · GET/PUT/DELETE /api/collections/{id} · POST/DELETE /api/collections/{id}/items |
 | Rating | POST /api/ratings · GET /api/ratings/me/contents/{contentId}, /contents/{contentId} · PUT/DELETE /api/ratings/{id} |
 | Favorite | POST /api/favorites · GET /api/favorites/me · DELETE /api/favorites/{id} |
+| Chat | POST /api/chat (Claude API 기반 영화/시리즈 제목 찾기) |
 
 설정 파일: `application.yaml`(공통) + `application-dev.yaml`(H2, dev) + `application-prod.yaml`(MySQL, prod) 로 분리 완료.
+
+**성능 개선 이력**
+- Collection 공개 목록: 메모리 Slice → Spring Data JPA Pageable + viewCount 비정규화 (avg 10ms → 4ms)
+- 상세 내용: `trouble shooting/Slice → Pageable 전환.md`
 
 ## 진행 현황 (프론트)
 
