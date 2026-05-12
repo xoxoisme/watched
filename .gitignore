@@ -6,6 +6,7 @@
 .gradle/
 backend/build/
 backend/out/
+backend/bin/
 backend/.gradle/
 
 # =========================
