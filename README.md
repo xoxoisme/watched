@@ -2,6 +2,8 @@
 
 > 영화, 드라마, 애니메이션 등 다양한 OTT 콘텐츠의 시청 기록을 관리하고, 평점과 리뷰를 통해 개인 취향을 아카이빙할 수 있는 웹 서비스입니다.
 
+> 백엔드는 직접 설계·구현했으며, 프론트엔드(Next.js)만 AI 페어 프로그래밍으로 작업했습니다.
+
 ---
 
 <img src="/assets/localhost_3000_ (2).png">
@@ -28,7 +30,7 @@
 | Backend | Java 21, Spring Boot 3.5.13, Spring Data JPA, Spring Security |
 | Build | Gradle (Kotlin DSL) |
 | Auth | JWT (jjwt 0.12.6) |
-| Database | MySQL 8.0 (prod), H2 (dev), Redis (캐싱 예정) |
+| Database | MySQL 8.0 (prod), H2 (dev) |
 | Mail | Spring Boot Starter Mail (SMTP) |
 | Test | JUnit 5, Spring Security Test |
 | API Docs | SpringDoc OpenAPI 2.8.16 (Swagger UI) |
