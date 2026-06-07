@@ -5,7 +5,6 @@
 ---
 
 <img src="/assets/localhost_3000_ (2).png">
-<img src="/assets/스크린샷 컬렉션.png">
 
 ---
 
