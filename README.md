@@ -71,8 +71,6 @@ watched/
         └── stores/      # Zustand 전역 상태 (authStore)
 ```
 
-각 도메인 패키지는 `entity/` · `controller/` · `service/` · `repository/` · `dto/(request|response)` 하위 구조를 따릅니다.
-
 ---
 
 ## 실행 방법
@@ -137,68 +135,7 @@ npm run lint
 | `MAIL_USERNAME` / `MAIL_PASSWORD` | SMTP 계정 (이메일 인증) |
 | `MYSQL_*` (prod) | DB 호스트 / 사용자 / 비밀번호 |
 
----
-
-## API 응답 형식
-
-모든 컨트롤러는 `ApiResponse<T>`로 응답을 통일합니다.
-
-```json
-{
-  "success": true,
-  "data": { ... }
-}
-```
-
-목록 조회는 `PageResponse<T>`로 페이지네이션됩니다 (기본 12개/페이지).
-
-```json
-{
-  "success": true,
-  "data": {
-    "content": [ ... ],
-    "page": 0,
-    "size": 12,
-    "totalPages": 3,
-    "totalElements": 30
-  }
-}
-```
-
----
-
-## API 엔드포인트
-
-| 도메인 | 주요 엔드포인트 |
-|--------|----------------|
-| User | `POST /api/users/signup` · `POST /api/users/login` · `POST /api/users/logout` · `GET/PUT /api/users/me` |
-| Content | `GET /api/contents/trending` · `/top/movies` · `/top/tv` · `/recommendations` · `/search` · `GET /api/contents/{id}` · `/tmdb/{tmdbId}` · `POST /api/contents` |
-| Watch | `POST /api/watch` · `GET /api/watch/me` · `PUT/DELETE /api/watch/{id}` |
-| Review | `POST /api/reviews` · `GET /api/reviews/contents/{contentId}` · `/me` · `PUT/DELETE /api/reviews/{id}` · `POST /api/reviews/{id}/likes` |
-| Collection | `POST /api/collections` · `GET /api/collections/me` · `/public?period=today\|month\|year\|all` · `GET/PUT/DELETE /api/collections/{id}` · `POST/DELETE /api/collections/{id}/items` |
-| Rating | `POST /api/ratings` · `GET /api/ratings/me/contents/{contentId}` · `/contents/{contentId}` · `PUT/DELETE /api/ratings/{id}` |
-| Favorite | `POST /api/favorites` · `GET /api/favorites/me` · `DELETE /api/favorites/{id}` |
-| Chat | `POST /api/chat` (Claude API 기반 영화/시리즈 제목 찾기) |
-
----
-
-## 페이지 목록
-
-| 페이지 | 경로 |
-|--------|------|
-| 홈 (트렌딩 / 인기) | `/` |
-| 로그인 / 회원가입 | `/login`, `/signup` |
-| 온보딩 | `/onboarding` |
-| 내 프로필 | `/me` |
-| 시청 기록 | `/my/watch` |
-| 내 리뷰 | `/my/reviews` |
-| 즐겨찾기 | `/my/favorites` |
-| 검색 | `/search` |
-| 콘텐츠 상세 (TMDB) | `/contents/[tmdbId]` |
-| 콘텐츠 상세 (DB) | `/contents/c/[id]` |
-| 내 컬렉션 | `/collections/me` |
-| 컬렉션 상세 | `/collections/[id]` |
-| 공개 컬렉션 탐색 | `/collections/explore` |
+- Claude는 유료라, 무료로 사용 가능한 Gemini 사용을 권합니다.
 
 ---
 
@@ -218,8 +155,6 @@ npm run lint
 |------|-----|-----|-----|
 | 메모리 Slice | 10ms | 6ms | 67ms |
 | Pageable + viewCount 컬럼 | **4ms** | **1ms** | 45ms |
-
-상세 트러블슈팅은 [`trouble shooting/Slice → Pageable 전환.md`](./trouble%20shooting/Slice%20→%20Pageable%20전환.md) 참고.
 
 ---
 
